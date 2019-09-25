@@ -1,0 +1,15 @@
+dist: bionic
+sudo: false
+
+language: node_js
+node_js:
+  - '10'
+
+install:
+  - npm install
+
+script:
+  - npm run lint
+  - npm run test
+
+after_success: npm run coverage

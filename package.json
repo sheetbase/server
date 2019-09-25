@@ -1,0 +1,55 @@
+{
+  "name": "@sheetbase/server",
+  "version": "2.0.0-beta",
+  "description": "Build server app on Google Apps Script.",
+  "author": "Sheetbase",
+  "homepage": "https://sheetbase.dev",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/bundles/sheetbase-server.umd.js",
+  "module": "dist/fesm3/sheetbase-server.js",
+  "typings": "dist/sheetbase-server.d.ts",
+  "scripts": {
+    "build": "sheetbase-app-scripts build",
+    "docs": "sheetbase-app-scripts docs",
+    "lint": "gts check",
+    "fix": "gts fix",
+    "test": "tsc -p tsconfig-test.json && nyc --cache false mocha build/test/**/*.js",
+    "coverage": "nyc --cache false report --reporter=text-lcov | coveralls"
+  },
+  "nyc": {
+    "exclude": [
+      "**/test"
+    ]
+  },
+  "keywords": [
+    "google-apps-script",
+    "sheetbase",
+    "expressjs",
+    "server",
+    "api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sheetbase/server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sheetbase/server/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@sheetbase/app-scripts": "^2.0.0-beta",
+    "@types/chai": "^4.2.2",
+    "@types/google-apps-script": "^0.0.59",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.5",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.6",
+    "gts": "^1.1.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "typescript": "^3.6.3"
+  }
+}

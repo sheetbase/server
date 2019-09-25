@@ -1,0 +1,13 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist/esm3",
+    "declarationDir": "./dist",
+    "module": "esnext",
+    "target": "es3"
+  },
+  "files": [
+    "src/public-api.ts"
+  ]
+}

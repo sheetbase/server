@@ -1,0 +1,8 @@
+node_modules/
+
+# build
+build/
+dist/
+
+# test
+.nyc_output/
