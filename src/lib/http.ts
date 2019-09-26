@@ -1,89 +1,99 @@
-import { HttpEvent, RouteRequest, RouteResponse, RouteHandler } from './types';
+import {
+  HttpMethod,
+  HttpEvent,
+  RouteRequest,
+  RouteResponse,
+  RoutingHandler,
+  RouteNext,
+} from './types';
 
-import { OptionService } from './option';
-import { ResponseService } from './response';
-import { RouterService } from './router';
+import { Server } from './server';
+import { Request } from './request';
+import { Response } from './response';
 
-export class HttpService {
-  private optionService: OptionService;
-  private responseService: ResponseService;
-  private routerService: RouterService;
+export class Http {
 
-  private allowedMethods: string[] = [
-    'GET', 'POST', 'PUT', 'PATCH', 'DELETE',
-  ];
+  private SERVER: Server;
+  private REQUEST: Request;
+  private RESPONSE: Response;
 
   constructor(
-    optionService: OptionService,
-    responseService: ResponseService,
-    routerService: RouterService,
+    SERVER: Server,
+    REQUEST: Request,
+    RESPONSE: Response,
   ) {
-    this.optionService = optionService;
-    this.responseService = responseService;
-    this.routerService = routerService;
+    this.SERVER = SERVER;
+    this.REQUEST = REQUEST;
+    this.RESPONSE = RESPONSE;
   }
 
   get(e: HttpEvent) {
-    return this.http(e, 'GET');
+    return this.handler('get', e);
   }
 
   post(e: HttpEvent) {
-    return this.http(e, 'POST');
+    return this.handler('post', e);
   }
 
-  private http(e: HttpEvent, method = 'GET') {
-    let endpoint: string = (e.parameter || {}).e || '';
-    if (endpoint.substr(0, 1) !== '/') { endpoint = '/' + endpoint; }
-    // methods
-    const originalMethod = method;
-    const allowMethodsWhenDoGet: boolean = this.optionService.get('allowMethodsWhenDoGet');
-    if (method !== 'GET' || (method === 'GET' && allowMethodsWhenDoGet)) {
-      const useMeMethod: string = (e.parameter || {}).method;
-      method = useMeMethod ? useMeMethod.toUpperCase() : method;
-      method = (this.allowedMethods.indexOf(method) < 0) ? originalMethod : method;
-    }
-    // request object
-    const req: RouteRequest = {
-      query: e.parameter || {},
-      params: e.parameter || {},
-      body: {},
-      data: {},
-    };
-    // body
-    if (method === 'GET' && allowMethodsWhenDoGet) {
-      try {
-        req.body = JSON.parse((e.parameter || {}).body || '{}');
-      } catch (error) {
-        req.body = {};
-      }
-    } else {
-      req.body = JSON.parse(e.postData ? e.postData.contents : '{}');
-    }
-    // response object
-    const res: RouteResponse = this.responseService;
-    // execute handlers
-    const handlers: RouteHandler[] = this.routerService.route(method, endpoint);
+  private extractQuery(httpEvent: HttpEvent) {
+    return this.REQUEST.query(httpEvent);
+  }
+
+  private extractBody(httpEvent: HttpEvent) {
+    const { body: encodedBody } = this.extractQuery(httpEvent);
+    return !!encodedBody
+      ? JSON.parse(decodeURIComponent(encodedBody))
+      : this.REQUEST.body(httpEvent);
+  }
+
+  private extractEndpoint(httpEvent: HttpEvent) {
+    const { e: endpoint = '' } = this.extractQuery(httpEvent);
+    return this.SERVER.resolveEndpoint(endpoint);
+  }
+
+  private extractMethod(httpMethod: HttpMethod, httpEvent: HttpEvent) {
+    const { method: customMethod } = this.extractQuery(httpEvent);
+    return (
+        !!customMethod &&
+        this.SERVER.isMethodValid(customMethod)
+      )
+      ? customMethod
+      : httpMethod;
+  }
+
+  private handler(httpMethod: HttpMethod, httpEvent: HttpEvent) {
+    // retrieve data
+    const query = this.extractQuery(httpEvent);
+    const body = this.extractBody(httpEvent);
+    const endpoint = this.extractEndpoint(httpEvent);
+    const method = this.extractMethod(httpMethod, httpEvent);
+    // execute
+    const handlers = this.SERVER.getRoute(method, endpoint);
+    const req = { query, body, data: {} } as RouteRequest;
+    const res = this.RESPONSE;
     return this.execute(handlers, req, res);
   }
 
-  private execute(handlers: RouteHandler[], req: RouteRequest, res: RouteResponse) {
-    const handler: RouteHandler = handlers.shift();
+  private execute(
+    handlers: RoutingHandler[],
+    req: RouteRequest,
+    res: RouteResponse
+  ) {
+    const handler = handlers.shift();
     if (!handler) {
-      throw new Error('Invalid router handler!');
+      throw new Error('Invalid router handlers.');
     }
-    if (handlers.length < 1) {
+    if (handlers.length === 0) {
       return handler(req, res);
     } else {
-      const next = (data: any) => {
-        if (data) {
-          if (!(data instanceof Object)) {
-            data = { value: data };
-          }
-          req.data = { ... (req.data || {}), ... (data || {}) };
+      const next: RouteNext = (data = {}) => {
+        if (!!data) {
+          req.data = { ...req.data, ...data };
         }
         return this.execute(handlers, req, res);
       };
       return handler(req, res, next);
     }
   }
+
 }

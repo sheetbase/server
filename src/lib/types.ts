@@ -1,65 +1,92 @@
-import { ResponseService } from './response';
-import { RouterService } from './router';
+// tslint:disable: no-any
+import { Response } from './response';
 
 export interface Options {
-  allowMethodsWhenDoGet?: boolean;
+  /**
+   * The template folder
+   */
   views?: string;
-  disabledRoutes?: string[];
-  routingErrors?: RoutingErrors;
+  /**
+   * Single api key
+   */
+  key?: string;
+  /**
+   * Multiple api keys
+   */
+  apiKeys?: ApiKeys;
+  /**
+   * Handler for invalid api key
+   * @param req - The request object
+   * @param res - The response object
+   */
+  failure?(req: RouteRequest, res: RouteResponse): any;
+  /**
+   * Trigger every time an api key is used
+   * @param req - The request object
+   * @param apiKey - The api key object
+   */
+  trigger?(req: RouteRequest, apiKey: ApiKey): void;
 }
 
-export interface AddonRoutesOptions {
-  router: RouterService;
-  disabledRoutes?: string[];
-  endpoint?: string;
-  middlewares?: RouteHandler[];
+export interface ApiKey {
+  key: string;
+  title?: string;
+  description?: string;
+  createdAt?: string;
+  [param: string]: any;
+}
+
+export interface ApiKeys {
+  [name: string]: ApiKey;
+};
+
+export type HttpMethod = 'get' | 'post';
+
+export interface HttpParam {
+  e?: string;
+  method?: RoutingMethod;
+  body?: string;
+  [param: string]: any;
 }
 
 export interface HttpEvent {
-  parameter?: any;
-  postData?: any;
+  parameter?: HttpParam;
+  postData?: {
+    contents?: string;
+  };
+}
+
+export interface RouteInstance {
+  baseEndpoint?: string;
+  disabledRoutes?: DisabledRoutes;
+  routingErrors?: RoutingErrors;
 }
 
 export interface RouteRequest {
-  query?: RouteQuery;
-  params?: RouteQuery;
-  body?: any;
-  data?: any;
+  query: any;
+  body: any;
+  data: any;
 }
 
-export interface RouteResponse extends ResponseService { }
+export interface RouteResponse extends Response {}
 
-export interface RouteQuery {
-  e?: string;
-  method?: string;
-  body?: string;
-  [key: string]: any;
-}
-
-export interface ResponseError {
-  error?: boolean;
-  code?: string;
-  message?: string;
-  status?: number;
-  meta?: {
-    timestamp?: number;
-    [prop: string]: any;
-  };
-}
+export type RouteNext = (data?: {}) => RoutingHandler;
 
 export interface ResponseSuccess {
-  data: any;
+  data: {};
   success?: boolean;
   status?: number;
-  meta?: {
-    timestamp?: number;
-    [prop: string]: any;
-  };
 }
 
-export type RouteNext = (data?: any) => RouteHandler;
+export interface ResponseError extends RoutingError {
+  error?: boolean;
+}
 
-export type RouteHandler = (
+export type RoutingMethod = HttpMethod | 'put' | 'patch' | 'delete';
+
+export type RoutingMethodExtended = 'all' | RoutingMethod;
+
+export type RoutingHandler = (
   req: RouteRequest,
   res: RouteResponse,
   next?: RouteNext,
@@ -75,4 +102,20 @@ export interface RoutingErrors {
   [code: string]: string | RoutingError;
 }
 
-export type LoggingLevel = 'DEBUG' | 'INFO' | 'WARNING' | 'ERROR';
+export type DisabledRouteValue = '*' | RoutingMethod[];
+
+export interface DisabledRoutes {
+  [endpoint: string]: DisabledRouteValue;
+}
+
+export type Middlewares = RoutingHandler[];
+
+export interface Routes {
+  [id: string]: RoutingHandler;
+}
+
+export interface RouteMiddlewares {
+  [id: string]: Middlewares;
+}
+
+export type LoggingLevel = 'debug' | 'info' | 'warning' | 'error';

@@ -1,29 +1,27 @@
-import { ResponseError, ResponseSuccess, RoutingErrors, RoutingError } from './types';
-import { OptionService } from './option';
+// tslint:disable: no-any
+import { ResponseError } from './types';
+import { Server } from './server';
 
 declare const ejs: any;
 declare const Handlebars: any;
 
-export class ResponseService {
-  private optionService: OptionService;
+export class Response {
 
-  private allowedExtensions: string[] = [
+  private SERVER: Server;
+
+  private allowedExtensions = [
     'gs', 'hbs', 'ejs',
   ];
 
-  constructor(optionService: OptionService) {
-    this.optionService = optionService;
+  constructor(SERVER: Server) {
+    this.SERVER = SERVER;
   }
 
-  setErrors(errors: RoutingErrors, override = false): void {
-    this.optionService.setRoutingErrors(errors, override);
-  }
-
-  send(content: string | {}) {
-    if (content instanceof Object) {
-      return this.json(content);
+  send<Data>(data: string | Data) {
+    if (typeof data === 'string') {
+      return this.html(data);
     } else {
-      return this.html(content);
+      return this.json(data);
     }
   }
 
@@ -31,105 +29,119 @@ export class ResponseService {
     return HtmlService.createHtmlOutput(html);
   }
 
-  render(template: any, data: {} = {}, viewEngine = 'raw') {
-    if (typeof template === 'string') {
-      const fileName: string = template;
-      const views: string = this.optionService.get('views') as string;
-      let fileExt: string = (template.split('.') as string[]).pop();
-      fileExt = (this.allowedExtensions.indexOf(fileExt) > -1) ? fileExt : null;
-      if (fileExt) { viewEngine = fileExt; }
-      template = HtmlService.createTemplateFromFile((views ? views + '/' : '') + fileName);
+  render(
+    templating: string | GoogleAppsScript.HTML.HtmlTemplate,
+    data: {[key: string]: any} = {},
+    viewEngine = 'raw',
+  ) {
+    // turn file into templating
+    if (typeof templating === 'string') {
+      const { views } = this.SERVER.getOptions();
+      // extract file name & extension
+      const fileName = templating;
+      const fileExt = templating.split('.').pop() as string;
+      // set view engine base on the extension if valid 
+      viewEngine = this.allowedExtensions.indexOf(fileExt) !== -1 ? fileExt : 'raw';
+      // load template from file
+      templating = HtmlService.createTemplateFromFile(
+        (views ? views + '/' : '') + fileName,
+      );
     }
-    // render accordingly
-    const templateText: string = template.getRawContent();
-    let outputHtml: string;
-    if (viewEngine === 'native' || viewEngine === 'gs') {
+    // load template
+    const templateText = templating.getRawContent();
+    // get html accordingly
+    let outputHtml = '';
+    // native
+    if (
+      viewEngine === 'native' ||
+      viewEngine === 'gs'
+    ) {
       try {
         for (const key of Object.keys(data)) {
-          template[key] = data[key];
+          templating[key] = data[key];
         }
-        // NOTE: somehow this doesn't work
-        outputHtml = template.evaluate().getContent();
+        outputHtml = templating.evaluate().getContent();
       } catch (error) {
         outputHtml = templateText;
       }
-    } else if (viewEngine === 'handlebars' || viewEngine === 'hbs') {
+    }
+    // handlebars
+    else if (
+      viewEngine === 'handlebars' ||
+      viewEngine === 'hbs'
+    ) {
       const render = Handlebars.compile(templateText);
       outputHtml = render(data);
-    } else if (viewEngine === 'ejs') {
+    }
+    // ejs
+    else if (viewEngine === 'ejs') {
       outputHtml = ejs.render(templateText, data);
-    } else {
+    }
+    // raw html
+    else {
       outputHtml = templateText;
     }
+    // returns
     return this.html(outputHtml);
   }
 
-  json(object: {}) {
-    const JSONString = JSON.stringify(object);
-    const JSONOutput = ContentService.createTextOutput(JSONString);
-    JSONOutput.setMimeType(ContentService.MimeType.JSON);
-    return JSONOutput;
+  json<Data>(data: Data) {
+    const jsonOutput = ContentService.createTextOutput(JSON.stringify(data));
+    jsonOutput.setMimeType(ContentService.MimeType.JSON);
+    return jsonOutput;
   }
 
-  success(data: any, meta: any = {}) {
-    if (!data) {
-      return this.error();
-    }
-    if (!(data instanceof Object)) {
-      data = { value: data };
-    }
-    if (!(meta instanceof Object)) {
-      meta = { value: meta };
-    }
+  done() {
+    return this.success({ done: true });
+  }
+
+  success<Data>(data: Data) {
     return this.json({
       success: true,
       status: 200,
-      data,
-      meta: {
-        timestamp: new Date().getTime(),
-        ... meta,
-      },
-    } as ResponseSuccess);
+      data: data instanceof Object ? data : { value: data },
+    });
   }
 
-  error(
-    err?: string | ResponseError,
-    meta: any = {},
-  ) {
+  error(input: string | Error | ResponseError) {
     let responseError: ResponseError;
-    if (typeof err === 'string') { // a string
-      // build response erro from routing errors
-      let code: string = err;
-      const errors = this.optionService.getRoutingErrors();
-
-      let error = errors[code];
-      if (!error) {
-        error = { message: code };
-        code = null;
+    // a code or any string
+    if (typeof input === 'string') {
+      const routingErrors = this.SERVER.getRoutingErrors();
+      // build response error from routing errors
+      const error = routingErrors[input];
+      // no config data
+      if (
+        !error ||
+        typeof error === 'string'
+      ) {
+        responseError = {
+          message: error || input,
+        };
       } else {
-        error = (typeof error === 'string') ? { status: 400, message: error } : error;
+        responseError = error;
       }
-
-      // return a response error
-      const { status = 400, message } = error as RoutingError;
-      responseError = { code, message, status };
-    } else {  // a ResponseError
-      responseError = err as ResponseError || {};
     }
-
-    if (!responseError.status) responseError.status = 500;
-    if (!responseError.code) responseError.code = 'app/internal';
-    if (!responseError.message) responseError.message = 'Unknown error.';
-    if (!(meta instanceof Object)) {
-      meta = { value: meta };
+    // native error
+    else if (input instanceof Error) {
+      responseError = {
+        message: input.message,
+      };
     }
+    // a ResponseError
+    else {
+      responseError = input;
+    }
+    // returns
     return this.json({
+      // default data
+      status: 500,
+      code: 'app/internal',
+      message: 'Unknown error.',
+      // custom
       ... responseError,
+      // must have
       error: true,
-      meta: {
-        timestamp: new Date().getTime(),
-        ... meta,
-      },
-    } as ResponseError);
+    });
   }
 }

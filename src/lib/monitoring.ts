@@ -1,15 +1,16 @@
+// tslint:disable: no-any
 import { LoggingLevel } from './types';
 
-export class MonitoringService {
+export class Monitoring {
 
   constructor() {}
 
-  logging<Value>(value: Value, level: LoggingLevel = 'DEBUG') {
-    if (level === 'ERROR') {
+  logging<Value>(value: Value, level: LoggingLevel = 'debug') {
+    if (level === 'error') {
       return this.error(value);
-    } else if (level === 'WARNING') {
+    } else if (level === 'warning') {
       return this.warn(value);
-    } else if (level === 'INFO') {
+    } else if (level === 'info') {
       return this.info(value);
     } else {
       return this.log(value);
