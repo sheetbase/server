@@ -1,11 +1,10 @@
-// tslint:disable: no-any
-import { LoggingLevel } from './types';
+import { LoggingLevel, LoggingValue } from './types';
 
 export class Monitoring {
 
   constructor() {}
 
-  logging<Value>(value: Value, level: LoggingLevel = 'debug') {
+  logging(value: LoggingValue, level: LoggingLevel = 'debug') {
     if (level === 'error') {
       return this.error(value);
     } else if (level === 'warning') {
@@ -17,20 +16,20 @@ export class Monitoring {
     }
   }
 
-  log<Value>(value: Value) {
-    return console.log(value as any);
+  log(value: LoggingValue) {
+    return console.log(value);
   }
 
-  info<Value>(value: Value) {
-    return console.info(value as any);
+  info(value: LoggingValue) {
+    return console.info(value);
   }
 
-  warn<Value>(value: Value) {
-    return console.warn(value as any);
+  warn(value: LoggingValue) {
+    return console.warn(value);
   }
 
-  error<Value>(value: Value) {
-    return console.error(value as any);
+  error(value: LoggingValue) {
+    return console.error(value);
   }
 
 }

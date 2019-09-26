@@ -1,4 +1,9 @@
-import { DisabledRoutes, RoutingErrors, LoggingLevel } from './types';
+import {
+  DisabledRoutes,
+  RoutingErrors,
+  LoggingLevel,
+  LoggingValue,
+} from './types';
 
 import { Monitoring } from './monitoring';
 import { Router } from './router';
@@ -46,7 +51,7 @@ export class Route {
   PUT__logging(
     body: {
       level: LoggingLevel,
-      value: any,
+      value: LoggingValue,
     }
   ) {
     const { level, value } = body;

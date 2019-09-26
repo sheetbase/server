@@ -1,4 +1,9 @@
-import { RouteInstance, DisabledRoutes, RoutingHandler, RoutingErrors } from './types';
+import {
+  RouteInstance,
+  DisabledRoutes,
+  RoutingHandler,
+  RoutingErrors,
+} from './types';
 import { Server } from './server';
 
 export class Router {

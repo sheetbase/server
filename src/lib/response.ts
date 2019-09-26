@@ -1,17 +1,19 @@
-// tslint:disable: no-any
 import { ResponseError } from './types';
 import { Server } from './server';
 
-declare const ejs: any;
-declare const Handlebars: any;
+declare const ejs: {
+  render: (templateText: string, data: {}) => string;
+};
+
+declare const Handlebars: {
+  compile(templateText: string): (data: {}) => string;
+};
 
 export class Response {
 
   private SERVER: Server;
 
-  private allowedExtensions = [
-    'gs', 'hbs', 'ejs',
-  ];
+  private allowedExtensions = ['gs', 'hbs', 'ejs'];
 
   constructor(SERVER: Server) {
     this.SERVER = SERVER;
@@ -31,7 +33,10 @@ export class Response {
 
   render(
     templating: string | GoogleAppsScript.HTML.HtmlTemplate,
-    data: {[key: string]: any} = {},
+    data: {
+      // tslint:disable-next-line: no-any
+      [key: string]: any;
+    } = {},
     viewEngine = 'raw',
   ) {
     // turn file into templating
@@ -110,23 +115,16 @@ export class Response {
       const routingErrors = this.SERVER.getRoutingErrors();
       // build response error from routing errors
       const error = routingErrors[input];
-      // no config data
-      if (
-        !error ||
-        typeof error === 'string'
-      ) {
-        responseError = {
-          message: error || input,
-        };
+      // no config data or just text
+      if (!error || typeof error === 'string') {
+        responseError = { message: error || input };
       } else {
         responseError = error;
       }
     }
     // native error
     else if (input instanceof Error) {
-      responseError = {
-        message: input.message,
-      };
+      responseError = { message: input.message };
     }
     // a ResponseError
     else {
@@ -136,7 +134,7 @@ export class Response {
     return this.json({
       // default data
       status: 500,
-      code: 'app/internal',
+      code: 'unknown',
       message: 'Unknown error.',
       // custom
       ... responseError,
@@ -144,4 +142,5 @@ export class Response {
       error: true,
     });
   }
+
 }

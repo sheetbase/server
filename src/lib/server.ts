@@ -3,7 +3,6 @@ import {
   DisabledRouteValue,
   DisabledRoutes,
   RoutingMethod,
-  RoutingMethodExtended,
   RoutingHandler,
   RoutingError,
   RoutingErrors,
@@ -23,7 +22,7 @@ export class Server {
   private routeMiddlewares: RouteMiddlewares = {};
   private sharedMiddlewares: Middlewares = [];
 
-  private allMethods: RoutingMethod[] = [
+  private methods: RoutingMethod[] = [
     'get', 'post', 'put', 'patch', 'delete',
   ];
 
@@ -86,11 +85,11 @@ export class Server {
   }
 
   getAllMethods() {
-    return this.allMethods;
+    return this.methods;
   }
 
   isMethodValid(method: string) {
-    return this.allMethods.indexOf(method as RoutingMethod) !== -1;
+    return this.methods.indexOf(method as RoutingMethod) !== -1;
   }
 
   addSharedMiddlewares(middlewares: Middlewares) {
@@ -129,7 +128,7 @@ export class Server {
     endpoint: string,
     handler: RoutingHandler,
   ) {
-    for (const method of this.allMethods) {
+    for (const method of this.methods) {
       this.setRouteHandler(method, endpoint, handler);
     }
   }
@@ -138,7 +137,7 @@ export class Server {
     endpoint: string,
     handlers: RoutingHandler[],
   ) {
-    for (const method of this.allMethods) {
+    for (const method of this.methods) {
       this.setRouteMiddlewares(method, endpoint, handlers);
     }
   }

@@ -16,16 +16,12 @@ export interface Options {
   apiKeys?: ApiKeys;
   /**
    * Handler for invalid api key
-   * @param req - The request object
-   * @param res - The response object
    */
-  failure?(req: RouteRequest, res: RouteResponse): any;
+  failure?: (req: RouteRequest, res: RouteResponse) => void;
   /**
    * Trigger every time an api key is used
-   * @param req - The request object
-   * @param apiKey - The api key object
    */
-  trigger?(req: RouteRequest, apiKey: ApiKey): void;
+  trigger?: (req: RouteRequest, apiKey: ApiKey) => void;
 }
 
 export interface ApiKey {
@@ -33,7 +29,7 @@ export interface ApiKey {
   title?: string;
   description?: string;
   createdAt?: string;
-  [param: string]: any;
+  [meta: string]: any;
 }
 
 export interface ApiKeys {
@@ -84,8 +80,6 @@ export interface ResponseError extends RoutingError {
 
 export type RoutingMethod = HttpMethod | 'put' | 'patch' | 'delete';
 
-export type RoutingMethodExtended = 'all' | RoutingMethod;
-
 export type RoutingHandler = (
   req: RouteRequest,
   res: RouteResponse,
@@ -119,3 +113,5 @@ export interface RouteMiddlewares {
 }
 
 export type LoggingLevel = 'debug' | 'info' | 'warning' | 'error';
+
+export type LoggingValue = string | {};
