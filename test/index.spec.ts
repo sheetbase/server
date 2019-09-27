@@ -14,7 +14,7 @@ async function getServer() {
   return m.server();
 }
 
-describe('@lib/index', () => {
+describe('index', () => {
 
   it('#server', async () => {
     const SERVER = await getServer();
