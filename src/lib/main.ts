@@ -66,17 +66,17 @@ export class Main {
   }
 
   /**
+   * Get the Middleware instance
+   */
+  middleware() {
+    return this.MIDDLEWARE;
+  }
+
+  /**
    * Expose the module routes
    */
   registerRoutes() {
     return this.ROUTE.registerRoutes(this.ROUTER);
-  }
-
-  /**
-   * Get the api key middleware
-   */
-  apiKeyMiddleware() {
-    return this.MIDDLEWARE.apiKey();
   }
 
 }

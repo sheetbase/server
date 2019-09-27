@@ -1,8 +1,5 @@
 // tslint:disable: no-any
 import { expect } from 'chai';
-import {
-  rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
 
 import { Monitoring } from '../src/lib/monitoring';
 
@@ -12,7 +9,7 @@ global['console'].warn = ((value: any) => ({ warn: value })) as any;
 global['console'].error = ((value: any) => ({ error: value })) as any;
 
 function setup() {
-  return rewireService(Monitoring).getInstance();
+  return new Monitoring();
 }
 
 describe('monitoring', () => {

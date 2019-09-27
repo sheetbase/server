@@ -1,12 +1,9 @@
 import { expect } from 'chai';
-import {
-  rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
 
 import { Request } from '../src/lib/request';
 
 function setup() {
-  return rewireService(Request).getInstance();
+  return new Request();
 }
 
 describe('request', () => {
