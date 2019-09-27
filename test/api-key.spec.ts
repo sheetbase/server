@@ -95,7 +95,7 @@ describe('api-key', () => {
       }
     });
     const r = service.getApiKey('xxx');
-    expect(r).eql({title: 'Default', key: 'xxx' });
+    expect(r).eql({title: 'Default', value: 'xxx' });
   });
 
 });

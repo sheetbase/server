@@ -21,7 +21,7 @@ export class APIKey {
   getApiKey(key: string) {
     const apiKeys = this.getApiKeys();
     const apiKey = apiKeys[key];
-    if (!!apiKey) { apiKey.key = key; }
+    if (!!apiKey) { apiKey.value = key; }
     return apiKey;
   }
 

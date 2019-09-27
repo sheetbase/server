@@ -25,7 +25,7 @@ export interface Options {
 }
 
 export interface ApiKey {
-  key?: string; // only exists when get a single api key
+  value?: string; // only exists when get a single api key
   title?: string;
   description?: string;
   createdAt?: string;
