@@ -3,7 +3,7 @@ import { rewireModule } from '../../../../lamnhan.com/modules/testing/dist/src/i
 
 class MockedMain {}
 
-async function getServer() {
+async function getEntry() {
   const moduleRewiring = rewireModule(
     () => import('../src/lib/index'),
     {
@@ -17,7 +17,7 @@ async function getServer() {
 describe('index', () => {
 
   it('#server', async () => {
-    const SERVER = await getServer();
+    const SERVER = await getEntry();
     expect(SERVER instanceof MockedMain).equal(true);
   });
 

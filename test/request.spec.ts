@@ -5,14 +5,14 @@ import {
 
 import { Request } from '../src/lib/request';
 
-async function setup() {
+function setup() {
   return rewireService(Request).getInstance();
 }
 
 describe('request', () => {
 
-  it('#query', async () => {
-    const service = await setup();
+  it('#query', () => {
+    const service = setup();
 
     const r1 = service.query({});
     const r2 = service.query({ parameter: {a: 1, b: 2} });
@@ -20,8 +20,8 @@ describe('request', () => {
     expect(r2).eql({a: 1, b: 2});
   });
 
-  it('#body', async () => {
-    const service = await setup();
+  it('#body', () => {
+    const service = setup();
 
     const r1 = service.body({});
     const r2 = service.body({ postData: {} });
