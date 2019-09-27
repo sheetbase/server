@@ -13,14 +13,16 @@ export class APIKey {
   getApiKeys() {
     const { apiKeys = {}, key } = this.SERVER.getOptions();
     if (!!key) {
-      apiKeys['default'] = { title: 'Untitled', key };
+      apiKeys[key] = { title: 'Default' };
     }
     return apiKeys;
   }
 
   getApiKey(key: string) {
     const apiKeys = this.getApiKeys();
-    return apiKeys[key];
+    const apiKey = apiKeys[key];
+    if (!!apiKey) { apiKey.key = key; }
+    return apiKey;
   }
 
 }

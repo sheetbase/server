@@ -25,7 +25,7 @@ export interface Options {
 }
 
 export interface ApiKey {
-  key: string;
+  key?: string; // only exists when get a single api key
   title?: string;
   description?: string;
   createdAt?: string;
@@ -33,7 +33,7 @@ export interface ApiKey {
 }
 
 export interface ApiKeys {
-  [name: string]: ApiKey;
+  [key: string]: ApiKey;
 };
 
 export type HttpMethod = 'get' | 'post';
