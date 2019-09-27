@@ -1,8 +1,8 @@
 node_modules/
 
-# build
-build/
-dist/
-
 # test
 .nyc_output/
+
+# build
+**/*.js
+dist/

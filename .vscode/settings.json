@@ -2,7 +2,7 @@
   "files.exclude": {
     ".vscode/": true,
     ".nyc_output/": true,
-    "build/": true,
+    "**/*.js": true,
     "dist/": true,
     "docs/": true
   }
