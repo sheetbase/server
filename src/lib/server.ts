@@ -84,7 +84,7 @@ export class Server {
     return isDisabled;
   }
 
-  getAllMethods() {
+  getMethods() {
     return this.methods;
   }
 

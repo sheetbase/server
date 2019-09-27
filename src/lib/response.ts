@@ -15,7 +15,9 @@ export class Response {
 
   private allowedExtensions = ['gs', 'hbs', 'ejs'];
 
-  constructor(SERVER: Server) {
+  constructor(
+    SERVER: Server,
+  ) {
     this.SERVER = SERVER;
   }
 
@@ -29,6 +31,59 @@ export class Response {
 
   html(html: string) {
     return HtmlService.createHtmlOutput(html);
+  }
+
+  json<Data>(data: Data) {
+    const jsonOutput = ContentService.createTextOutput(JSON.stringify(data));
+    jsonOutput.setMimeType(ContentService.MimeType.JSON);
+    return jsonOutput;
+  }
+
+  done() {
+    return this.success({ done: true });
+  }
+
+  success<Data>(data: Data) {
+    return this.json({
+      success: true,
+      status: 200,
+      data: data instanceof Object ? data : { value: data },
+    });
+  }
+
+  error(input: string | Error | ResponseError) {
+    let responseError: ResponseError;
+    // a code or any string
+    if (typeof input === 'string') {
+      const routingErrors = this.SERVER.getRoutingErrors();
+      // build response error from routing errors
+      const error = routingErrors[input];
+      // no config data or just text
+      if (!error || typeof error === 'string') {
+        responseError = { message: error || input };
+      } else {
+        responseError = error;
+      }
+    }
+    // native error
+    else if (input instanceof Error) {
+      responseError = { message: input.message };
+    }
+    // a ResponseError
+    else {
+      responseError = input;
+    }
+    // returns
+    return this.json({
+      // default data
+      status: 500,
+      code: 'unknown',
+      message: 'Unknown error.',
+      // custom
+      ... responseError,
+      // must have
+      error: true,
+    });
   }
 
   render(
@@ -88,59 +143,6 @@ export class Response {
     }
     // returns
     return this.html(outputHtml);
-  }
-
-  json<Data>(data: Data) {
-    const jsonOutput = ContentService.createTextOutput(JSON.stringify(data));
-    jsonOutput.setMimeType(ContentService.MimeType.JSON);
-    return jsonOutput;
-  }
-
-  done() {
-    return this.success({ done: true });
-  }
-
-  success<Data>(data: Data) {
-    return this.json({
-      success: true,
-      status: 200,
-      data: data instanceof Object ? data : { value: data },
-    });
-  }
-
-  error(input: string | Error | ResponseError) {
-    let responseError: ResponseError;
-    // a code or any string
-    if (typeof input === 'string') {
-      const routingErrors = this.SERVER.getRoutingErrors();
-      // build response error from routing errors
-      const error = routingErrors[input];
-      // no config data or just text
-      if (!error || typeof error === 'string') {
-        responseError = { message: error || input };
-      } else {
-        responseError = error;
-      }
-    }
-    // native error
-    else if (input instanceof Error) {
-      responseError = { message: input.message };
-    }
-    // a ResponseError
-    else {
-      responseError = input;
-    }
-    // returns
-    return this.json({
-      // default data
-      status: 500,
-      code: 'unknown',
-      message: 'Unknown error.',
-      // custom
-      ... responseError,
-      // must have
-      error: true,
-    });
   }
 
 }

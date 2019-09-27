@@ -15,8 +15,7 @@ export class Middleware {
     this.API_KEY = API_KEY;
   }
 
-  apiKeyMiddleware(
-  ) {
+  apiKey() {
     return (
       (
         req: RouteRequest,
@@ -24,9 +23,8 @@ export class Middleware {
         next: RouteNext
       ) => {
         const { trigger, failure } = this.SERVER.getOptions();
-        const key = req.body.key || req.query.key;
-        const apiKeys = this.API_KEY.load();
-        const apiKey = apiKeys[key];
+        // get the api key object
+        const apiKey = this.API_KEY.getApiKey(req.body.key || req.query.key);
         // invalid
         if (!apiKey) {
           if (failure && failure instanceof Function) {

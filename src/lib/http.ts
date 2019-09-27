@@ -67,11 +67,26 @@ export class Http {
     const body = this.extractBody(httpEvent);
     const endpoint = this.extractEndpoint(httpEvent);
     const method = this.extractMethod(httpMethod, httpEvent);
-    // execute
+    // get handlers
     const handlers = this.SERVER.getRoute(method, endpoint);
+    // req & res
     const req = { query, body, data: {} } as RouteRequest;
     const res = this.RESPONSE;
-    return this.execute(handlers, req, res);
+    // execute
+    try {
+      const result = this.execute(handlers, req, res);
+      if (!result) {
+        return res.done(); // direct returns, empty result
+      } else if (typeof result === 'string') {
+        return res.html(result); // direct returns, a string
+      } else if (!result.getContent) {
+        return res.success(result); // direct returns, json data
+      } else {
+        return result; // TextOutput or HtmlOutput
+      }
+    } catch (error) {
+      return res.error(error);
+    }
   }
 
   private execute(
@@ -79,14 +94,11 @@ export class Http {
     req: RouteRequest,
     res: RouteResponse
   ) {
-    const handler = handlers.shift();
-    if (!handler) {
-      throw new Error('Invalid router handlers.');
-    }
+    const handler = handlers.shift() as RoutingHandler;
     if (handlers.length === 0) {
       return handler(req, res);
     } else {
-      const next: RouteNext = (data = {}) => {
+      const next: RouteNext = data => {
         if (!!data) {
           req.data = { ...req.data, ...data };
         }
