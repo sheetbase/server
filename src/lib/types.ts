@@ -88,8 +88,8 @@ export type RoutingHandler = (
 
 export interface RoutingError {
   message: string;
-  code?: string | number;
   status?: number;
+  code?: string | number;
 }
 
 export interface RoutingErrors {
@@ -115,3 +115,5 @@ export interface RouteMiddlewares {
 export type LoggingLevel = 'debug' | 'info' | 'warning' | 'error';
 
 export type LoggingValue = string | {};
+
+export type ViewEngine = 'gs' | 'hbs' | 'ejs';

@@ -1,18 +1,33 @@
 // tslint:disable: no-any
 import { expect } from 'chai';
+import { sinon } from '../../../../lamnhan.com/modules/testing/dist/src/index';
 
 import { Monitoring } from '../src/lib/monitoring';
-
-global['console'].log = ((value: any) => ({ log: value })) as any;
-global['console'].info = ((value: any) => ({ info: value })) as any;
-global['console'].warn = ((value: any) => ({ warn: value })) as any;
-global['console'].error = ((value: any) => ({ error: value })) as any;
 
 function setup() {
   return new Monitoring();
 }
 
 describe('monitoring', () => {
+
+  let logStub: sinon.SinonStub;
+  let infoStub: sinon.SinonStub;
+  let warnStub: sinon.SinonStub;
+  let errorStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    logStub = sinon.stub(console, 'log').callsFake((value: any) => ({ log: value }));
+    infoStub = sinon.stub(console, 'info').callsFake((value: any) => ({ info: value }));
+    warnStub = sinon.stub(console, 'warn').callsFake((value: any) => ({ warn: value }));
+    errorStub = sinon.stub(console, 'error').callsFake((value: any) => ({ error: value }));
+  });
+
+  afterEach(() => {
+    logStub.restore();
+    infoStub.restore();
+    warnStub.restore();
+    errorStub.restore();
+  });
 
   it('#logging', () => {
     const service = setup();

@@ -32,7 +32,11 @@ class MockedAPIKey {}
 class MockedMiddleware {}
 
 // @lib/route
-class MockedRoute {}
+class MockedRoute {
+  registerRoutes(...args: any[]) {
+    return args;
+  }
+}
 
 function setup<
   ServiceStubs extends ServiceStubing<Main>,
@@ -82,16 +86,40 @@ describe('main', () => {
     expect(service.ROUTE instanceof MockedRoute).equal(true, '@lib/route');
   });
 
-  it('#server', async () => {});
+  it('#server', async () => {
+    const { service } = await setup();
+    const r = service.server();
+    expect(r instanceof MockedServer).equal(true);
+  });
 
-  it('#router', async () => {});
+  it('#router', async () => {
+    const { service } = await setup();
+    const r = service.router();
+    expect(r instanceof MockedRouter).equal(true);
+  });
 
-  it('#http', async () => {});
+  it('#http', async () => {
+    const { service } = await setup();
+    const r = service.http();
+    expect(r instanceof MockedHttp).equal(true);
+  });
 
-  it('#monitoring', async () => {});
+  it('#monitoring', async () => {
+    const { service } = await setup();
+    const r = service.monitoring();
+    expect(r instanceof MockedMonitoring).equal(true);
+  });
 
-  it('#middleware', async () => {});
+  it('#middleware', async () => {
+    const { service } = await setup();
+    const r = service.middleware();
+    expect(r instanceof MockedMiddleware).equal(true);
+  });
 
-  it('#registerRoutes', async () => {});
+  it('#registerRoutes', async () => {
+    const { service } = await setup();
+    const r: any = service.registerRoutes();
+    expect(r[0] instanceof MockedRouter).eql(true);
+  });
 
 });

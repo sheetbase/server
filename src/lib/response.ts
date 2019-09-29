@@ -1,4 +1,4 @@
-import { ResponseError } from './types';
+import { RoutingError, ViewEngine } from './types';
 import { Server } from './server';
 
 declare const ejs: {
@@ -51,37 +51,53 @@ export class Response {
     });
   }
 
-  error(input: string | Error | ResponseError) {
-    let responseError: ResponseError;
-    // a code or any string
-    if (typeof input === 'string') {
-      const routingErrors = this.SERVER.getRoutingErrors();
-      // build response error from routing errors
-      const error = routingErrors[input];
-      // no config data or just text
-      if (!error || typeof error === 'string') {
-        responseError = { message: error || input };
-      } else {
-        responseError = error;
+  error(input?: string | Error | RoutingError) {
+    let theError: RoutingError;
+    // default
+    if (!input) {
+      theError = {
+        code: 'unknown',
+        message: 'Unknown error.',
+      };
+    }
+    // a code or message
+    else if (typeof input === 'string') {
+      const { [input]: error } = this.SERVER.getRoutingErrors();
+      // a message
+      if (!error ) {
+        theError = {
+          code: 'error',
+          message: input,
+        };
+      }
+      // a code with string value
+      else if (typeof error === 'string') {
+        theError = {
+          code: input,
+          message: error,
+        };
+      }
+      // a code with full routing error value
+      else {
+        error.code = input; // set the code
+        theError = error;
       }
     }
     // native error
     else if (input instanceof Error) {
-      responseError = { message: input.message };
+      theError = {
+        code: input.name,
+        message: input.message,
+      };
     }
-    // a ResponseError
+    // a RoutingError
     else {
-      responseError = input;
+      theError = input as RoutingError;
     }
     // returns
     return this.json({
-      // default data
       status: 500,
-      code: 'unknown',
-      message: 'Unknown error.',
-      // custom
-      ... responseError,
-      // must have
+      ... theError,
       error: true,
     });
   }
@@ -92,19 +108,21 @@ export class Response {
       // tslint:disable-next-line: no-any
       [key: string]: any;
     } = {},
-    viewEngine = 'raw',
+    viewEngine?: ViewEngine,
   ) {
-    // turn file into templating
+    // turn file into the templating
     if (typeof templating === 'string') {
       const { views } = this.SERVER.getOptions();
       // extract file name & extension
       const fileName = templating;
-      const fileExt = templating.split('.').pop() as string;
+      const fileExt = fileName.split('.').pop() as string;
       // set view engine base on the extension if valid 
-      viewEngine = this.allowedExtensions.indexOf(fileExt) !== -1 ? fileExt : 'raw';
+      if (!viewEngine && this.allowedExtensions.indexOf(fileExt) !== -1) {
+        viewEngine = fileExt as ViewEngine;
+      }
       // load template from file
       templating = HtmlService.createTemplateFromFile(
-        (views ? views + '/' : '') + fileName,
+        (!!views ? views + '/' : '') + fileName,
       );
     }
     // load template
@@ -112,10 +130,7 @@ export class Response {
     // get html accordingly
     let outputHtml = '';
     // native
-    if (
-      viewEngine === 'native' ||
-      viewEngine === 'gs'
-    ) {
+    if (viewEngine === 'gs') {
       try {
         for (const key of Object.keys(data)) {
           templating[key] = data[key];
@@ -126,10 +141,7 @@ export class Response {
       }
     }
     // handlebars
-    else if (
-      viewEngine === 'handlebars' ||
-      viewEngine === 'hbs'
-    ) {
+    else if (viewEngine === 'hbs') {
       const render = Handlebars.compile(templateText);
       outputHtml = render(data);
     }
