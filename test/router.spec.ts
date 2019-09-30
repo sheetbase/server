@@ -40,7 +40,8 @@ function setup<
       '@lib/server': mockService({ ...mockedServer, ...serverMocks }),
     },
     serviceStubs,
-  ).getData();
+  )
+  .getResult();
 }
 
 describe('router', () => {

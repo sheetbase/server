@@ -3,27 +3,24 @@ import {
   HttpEvent,
   RouteRequest,
   RouteResponse,
-  RoutingHandler,
   RouteNext,
+  RoutingMethod,
+  RoutingHandler,
 } from './types';
 
 import { Server } from './server';
-import { Request } from './request';
 import { Response } from './response';
 
 export class Http {
 
   private SERVER: Server;
-  private REQUEST: Request;
   private RESPONSE: Response;
 
   constructor(
     SERVER: Server,
-    REQUEST: Request,
     RESPONSE: Response,
   ) {
     this.SERVER = SERVER;
-    this.REQUEST = REQUEST;
     this.RESPONSE = RESPONSE;
   }
 
@@ -35,43 +32,43 @@ export class Http {
     return this.handler('post', e);
   }
 
-  private extractQuery(httpEvent: HttpEvent) {
-    return this.REQUEST.query(httpEvent);
+  extractQuery(httpEvent: HttpEvent) {
+    return httpEvent.parameter || {};
   }
 
-  private extractBody(httpEvent: HttpEvent) {
+  extractBody(httpEvent: HttpEvent) {
     const { body: encodedBody } = this.extractQuery(httpEvent);
-    return !!encodedBody
+    const queryBody = !!encodedBody
       ? JSON.parse(decodeURIComponent(encodedBody))
-      : this.REQUEST.body(httpEvent);
+      : {};
+    const nativeBody = httpEvent.postData && httpEvent.postData.contents
+      ? JSON.parse(httpEvent.postData.contents)
+      : {};
+    return { ...queryBody, ...nativeBody };
   }
 
-  private extractEndpoint(httpEvent: HttpEvent) {
-    const { e: endpoint = '' } = this.extractQuery(httpEvent);
-    return this.SERVER.resolveEndpoint(endpoint);
-  }
-
-  private extractMethod(httpMethod: HttpMethod, httpEvent: HttpEvent) {
-    const { method: customMethod } = this.extractQuery(httpEvent);
-    return (
-        !!customMethod &&
-        this.SERVER.isMethodValid(customMethod)
-      )
+  getMethod(httpMethod: HttpMethod, customMethod?: RoutingMethod) {
+    return !!customMethod && this.SERVER.isMethodValid(customMethod)
       ? customMethod
       : httpMethod;
   }
 
-  private handler(httpMethod: HttpMethod, httpEvent: HttpEvent) {
+  getEndpoint(eParam = '') {
+    return this.SERVER.resolveEndpoint(eParam);
+  }
+
+  handler(httpMethod: HttpMethod, httpEvent: HttpEvent) {
     // retrieve data
     const query = this.extractQuery(httpEvent);
     const body = this.extractBody(httpEvent);
-    const endpoint = this.extractEndpoint(httpEvent);
-    const method = this.extractMethod(httpMethod, httpEvent);
     // get handlers
-    const handlers = this.SERVER.getRoute(method, endpoint);
+    const handlers = this.SERVER.getRoute(
+      this.getMethod(httpMethod, query.method),
+      this.getEndpoint(query.e),
+    );
     // req & res
     const req = { query, body, data: {} } as RouteRequest;
-    const res = this.RESPONSE;
+    const res = this.RESPONSE as RouteResponse;
     // execute
     try {
       const result = this.execute(handlers, req, res);
@@ -89,7 +86,7 @@ export class Http {
     }
   }
 
-  private execute(
+  execute(
     handlers: RoutingHandler[],
     req: RouteRequest,
     res: RouteResponse

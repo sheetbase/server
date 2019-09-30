@@ -10,9 +10,6 @@ import { Main } from '../src/lib/main';
 // @lib/server
 class MockedServer {}
 
-// @lib/request
-class MockedRequest {}
-
 // @lib/response
 class MockedResponse {}
 
@@ -47,7 +44,6 @@ function setup<
     '@lib/main',
     {
       '@lib/server': { Server: MockedServer },
-      '@lib/request': { Request: MockedRequest },
       '@lib/response': { Response: MockedResponse },
       '@lib/router': { Router: MockedRouter },
       '@lib/http': { Http: MockedHttp },
@@ -59,7 +55,8 @@ function setup<
     Main,
     undefined,
     serviceStubs,
-  );
+  )
+  .getResult();
 }
 
 describe('main', () => {
@@ -68,8 +65,6 @@ describe('main', () => {
     const { service } = await setup();
     //@ts-ignore
     expect(service.SERVER instanceof MockedServer).equal(true, '@lib/server');
-    //@ts-ignore
-    expect(service.REQUEST instanceof MockedRequest).equal(true, '@lib/request');
     //@ts-ignore
     expect(service.RESPONSE instanceof MockedResponse).equal(true, '@lib/response');
     //@ts-ignore
