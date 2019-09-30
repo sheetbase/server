@@ -19,7 +19,7 @@ const mockedServer = {
   addSharedMiddlewares: undefined,
   addRouteAll: undefined,
   addRoute: undefined,
-  resolveEndpoint: '.',
+  resolveEndpoint: undefined,
 };
 
 function setup<
@@ -150,7 +150,7 @@ describe('router', () => {
     expect(r instanceof Router).equal(true);
   });
 
-  it('#use (for route)', () => {
+  it('#buildEndpoint', () => {
     const {
       mockedServices: {
         '@lib/server': serverTesting,
@@ -158,11 +158,25 @@ describe('router', () => {
       service,
     } = setup();
 
-    const r = service.use('/xxx', (req, res, next) => next());
+    const r = service.buildEndpoint('xxx');
     const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
+
+    expect(resolveEndpointArgs).eql(['', 'xxx']);
+  });
+
+  it('#use (for route)', () => {
+    const {
+      mockedServices: {
+        '@lib/server': serverTesting,
+      },
+      service,
+    } = setup({
+      buildEndpoint: '.',
+    });
+
+    const r = service.use('/xxx', (req, res, next) => next());
     const setRouteMiddlewaresAllArgs = serverTesting.getResult('setRouteMiddlewaresAll').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(setRouteMiddlewaresAllArgs[0]).equal('/xxx'); // result of resolveEndpoint
     expect(setRouteMiddlewaresAllArgs[1][0] instanceof Function).equal(true); // handler
   });
@@ -191,13 +205,13 @@ describe('router', () => {
         '@lib/server': serverTesting,
       },
       service,
-    } = setup();
+    } = setup({
+      buildEndpoint: '.',
+    });
 
     const r = service.all('/xxx', (req, res, next) => next());
-    const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
     const addRouteAllArgs = serverTesting.getResult('addRouteAll').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(addRouteAllArgs[0]).equal('/xxx'); // result of resolveEndpoint
     expect(addRouteAllArgs[1][0] instanceof Function).equal(true); // handler
   });
@@ -208,13 +222,13 @@ describe('router', () => {
         '@lib/server': serverTesting,
       },
       service,
-    } = setup();
+    } = setup({
+      buildEndpoint: '.',
+    });
 
     const r = service.get('/xxx', (req, res, next) => next());
-    const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
     const addRouteArgs = serverTesting.getResult('addRoute').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(addRouteArgs[0]).equal('get'); // method
     expect(addRouteArgs[1]).equal('/xxx'); // result of resolveEndpoint
     expect(addRouteArgs[2][0] instanceof Function).equal(true); // handler
@@ -226,13 +240,13 @@ describe('router', () => {
         '@lib/server': serverTesting,
       },
       service,
-    } = setup();
+    } = setup({
+      buildEndpoint: '.',
+    });
 
     const r = service.post('/xxx', (req, res, next) => next());
-    const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
     const addRouteArgs = serverTesting.getResult('addRoute').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(addRouteArgs[0]).equal('post'); // method
     expect(addRouteArgs[1]).equal('/xxx'); // result of resolveEndpoint
     expect(addRouteArgs[2][0] instanceof Function).equal(true); // handler
@@ -244,13 +258,13 @@ describe('router', () => {
         '@lib/server': serverTesting,
       },
       service,
-    } = setup();
+    } = setup({
+      buildEndpoint: '.',
+    });
 
     const r = service.put('/xxx', (req, res, next) => next());
-    const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
     const addRouteArgs = serverTesting.getResult('addRoute').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(addRouteArgs[0]).equal('put'); // method
     expect(addRouteArgs[1]).equal('/xxx'); // result of resolveEndpoint
     expect(addRouteArgs[2][0] instanceof Function).equal(true); // handler
@@ -262,13 +276,13 @@ describe('router', () => {
         '@lib/server': serverTesting,
       },
       service,
-    } = setup();
+    } = setup({
+      buildEndpoint: '.',
+    });
 
     const r = service.patch('/xxx', (req, res, next) => next());
-    const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
     const addRouteArgs = serverTesting.getResult('addRoute').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(addRouteArgs[0]).equal('patch'); // method
     expect(addRouteArgs[1]).equal('/xxx'); // result of resolveEndpoint
     expect(addRouteArgs[2][0] instanceof Function).equal(true); // handler
@@ -280,13 +294,13 @@ describe('router', () => {
         '@lib/server': serverTesting,
       },
       service,
-    } = setup();
+    } = setup({
+      buildEndpoint: '.',
+    });
 
     const r = service.delete('/xxx', (req, res, next) => next());
-    const resolveEndpointArgs = serverTesting.getResult('resolveEndpoint').getArgs();
     const addRouteArgs = serverTesting.getResult('addRoute').getArgs();
 
-    expect(resolveEndpointArgs).eql(['/xxx', '']);
     expect(addRouteArgs[0]).equal('delete'); // method
     expect(addRouteArgs[1]).equal('/xxx'); // result of resolveEndpoint
     expect(addRouteArgs[2][0] instanceof Function).equal(true); // handler

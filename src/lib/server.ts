@@ -36,12 +36,33 @@ export class Server {
   getOptions() {
     return this.options;
   }
+  
+  getMethods() {
+    return this.methods;
+  }
 
   getRoutingErrors() {
     return this.routingErrors;
   }
+  
+  getDisabledRoutes() {
+    return this.disabledRoutes;
+  }
 
-  addRoutingError(code: string, error: RoutingError) {
+  resolveEndpoint(...endpointSegments: string[]) {
+    return ('/' + endpointSegments.join('/')).replace(/\/{2,}/g, '/');
+  }
+  
+  isMethodValid(method: string) {
+    return this.methods.indexOf(method as RoutingMethod) !== -1;
+  }
+
+  isRouteDisabled(method: RoutingMethod, endpoint: string) {
+    const value = this.disabledRoutes[endpoint];
+    return !!value && (value === '*' || value.indexOf(method) !== -1);
+  }
+
+  addRoutingError(code: string, error: string | RoutingError) {
     return this.routingErrors[code] = error;
   }
 
@@ -51,10 +72,6 @@ export class Server {
 
   setRoutingErrors(routingErrors: RoutingErrors) {
     return this.routingErrors = routingErrors;
-  }
-
-  getDisabledRoutes() {
-    return this.disabledRoutes;
   }
 
   addDisabledRoute(endpoint: string, value: DisabledRouteValue) {
@@ -69,27 +86,25 @@ export class Server {
     return this.disabledRoutes = disabledRoutes;
   }
 
-  isRouteDisabled(method: RoutingMethod, endpoint: string) {
-    let isDisabled = false;
-    const value = this.disabledRoutes[endpoint];
-    if (
-      !!value &&
-      (
-        value === '*' ||
-        value.indexOf(method) !== -1
-      )
-    ) {
-      isDisabled = true;
+  getRoute(method: RoutingMethod, endpoint: string) {
+    const defaultHandler: RoutingHandler = (req, res) => {
+      try {
+        return res.render('errors/404');
+      } catch (error) {
+        return res.html('<h1>404!</h1><p>Not found.</p>');
+      }
+    };
+    // check if disabled
+    if (this.isRouteDisabled(method, endpoint)) {
+      return [defaultHandler];
     }
-    return isDisabled;
-  }
-
-  getMethods() {
-    return this.methods;
-  }
-
-  isMethodValid(method: string) {
-    return this.methods.indexOf(method as RoutingMethod) !== -1;
+    // handler stack
+    const id = method + ':' + endpoint;
+    return [
+      ...this.sharedMiddlewares,
+      ...(this.routeMiddlewares[id] || []),
+      (this.routes[id] || defaultHandler)
+    ];
   }
 
   addSharedMiddlewares(middlewares: Middlewares) {
@@ -99,38 +114,12 @@ export class Server {
     ];
   }
 
-  setRouteHandler(
-    method: RoutingMethod,
-    endpoint: string,
-    handler: RoutingHandler,
-  ) {
-    return this.routes[method + ':' + endpoint] = handler;
-  }
-
   setRouteMiddlewares(
     method: RoutingMethod,
     endpoint: string,
     handlers: RoutingHandler[],
   ) {
     return this.routeMiddlewares[method + ':' + endpoint] = handlers;
-  }
-
-  addRoute(
-    method: RoutingMethod,
-    endpoint: string,
-    handlers: RoutingHandler[],
-  ) {
-    this.setRouteHandler(method, endpoint, handlers.pop() as RoutingHandler);
-    this.setRouteMiddlewares(method, endpoint, handlers);
-  }
-
-  setRouteHandlerAll(
-    endpoint: string,
-    handler: RoutingHandler,
-  ) {
-    for (const method of this.methods) {
-      this.setRouteHandler(method, endpoint, handler);
-    }
   }
   
   setRouteMiddlewaresAll(
@@ -142,39 +131,38 @@ export class Server {
     }
   }
 
+  setRouteHandler(
+    method: RoutingMethod,
+    endpoint: string,
+    handler: RoutingHandler,
+  ) {
+    return this.routes[method + ':' + endpoint] = handler;
+  }
+  
+  setRouteHandlerAll(
+    endpoint: string,
+    handler: RoutingHandler,
+  ) {
+    for (const method of this.methods) {
+      this.setRouteHandler(method, endpoint, handler);
+    }
+  }
+
+  addRoute(
+    method: RoutingMethod,
+    endpoint: string,
+    handlers: RoutingHandler[],
+  ) {
+    this.setRouteHandler(method, endpoint, handlers.pop() as RoutingHandler);
+    this.setRouteMiddlewares(method, endpoint, handlers);
+  }
+
   addRouteAll(
     endpoint: string,
     handlers: RoutingHandler[],
   ) {
     this.setRouteHandlerAll(endpoint, handlers.pop() as RoutingHandler);
     this.setRouteMiddlewaresAll(endpoint, handlers);
-  }
-
-  getRoute(method: RoutingMethod, endpoint: string) {
-    const defaultHandler: RoutingHandler = (req, res) => {
-      try {
-        return res.render('errors/404');
-      } catch (error) {
-        return res.html(`
-					<h1>404!</h1>
-					<p>Not found.</p>
-				`);
-      }
-    };
-    // check if disabled
-    if (this.isRouteDisabled(method, endpoint)) {
-      return [defaultHandler];
-    }
-    // handler stack
-    return [
-      ...this.sharedMiddlewares,
-      ...(this.routeMiddlewares[method + ':' + endpoint] || []),
-      (this.routes[method + ':' + endpoint] || defaultHandler)
-    ];
-  }
-
-  resolveEndpoint(...endpointSegments: string[]) {
-    return ('/' + endpointSegments.join('/')).replace(/\/{2,}/g, '/');
   }
 
 }

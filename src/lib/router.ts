@@ -43,11 +43,15 @@ export class Router {
     return this;
   }
 
+  buildEndpoint(segment: string) {
+    return this.SERVER.resolveEndpoint(this.baseEndpoint, segment);
+  }
+
   use(...handlers: Array<string | RoutingHandler>) {
     return typeof handlers[0] === 'string'
       // for a route
       ? this.SERVER.setRouteMiddlewaresAll(
-          this.SERVER.resolveEndpoint(handlers.shift() as string, this.baseEndpoint),
+          this.buildEndpoint(handlers.shift() as string),
           handlers as RoutingHandler[],
         )
       // for all routes
@@ -55,35 +59,27 @@ export class Router {
   }
 
   all(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRouteAll(
-      this.SERVER.resolveEndpoint(endpoint, this.baseEndpoint),
-      handlers,
-    );
+    this.SERVER.addRouteAll(this.buildEndpoint(endpoint), handlers);
   }
 
   get(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('get',
-      this.SERVER.resolveEndpoint(endpoint, this.baseEndpoint), handlers);
+    this.SERVER.addRoute('get', this.buildEndpoint(endpoint), handlers);
   }
 
   post(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('post',
-      this.SERVER.resolveEndpoint(endpoint, this.baseEndpoint), handlers);
+    this.SERVER.addRoute('post', this.buildEndpoint(endpoint), handlers);
   }
 
   put(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('put',
-      this.SERVER.resolveEndpoint(endpoint, this.baseEndpoint), handlers);
+    this.SERVER.addRoute('put', this.buildEndpoint(endpoint), handlers);
   }
 
   patch(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('patch',
-      this.SERVER.resolveEndpoint(endpoint, this.baseEndpoint), handlers);
+    this.SERVER.addRoute('patch', this.buildEndpoint(endpoint), handlers);
   }
 
   delete(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('delete',
-      this.SERVER.resolveEndpoint(endpoint, this.baseEndpoint), handlers);
+    this.SERVER.addRoute('delete', this.buildEndpoint(endpoint), handlers);
   }
 
 }
