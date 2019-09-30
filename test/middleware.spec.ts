@@ -65,16 +65,19 @@ describe('api-key', () => {
     const r1 = apiKeyMiddleware(
       { query: {}, body: {} } as any,
       { render: (...args: any[]) => args } as any,
+      () => true as any,
     );
     // not support api key (key in query)
     const r2 = apiKeyMiddleware(
       { query: { key: 'xxx' }, body: {} } as any,
       { render: (...args: any[]) => args } as any,
+      () => true as any,
     );
     // not support api key (key in body)
     const r3 = apiKeyMiddleware(
       { query: {}, body: { key: 'xxx2' } } as any,
       { render: (...args: any[]) => args } as any,
+      () => true as any,
     );
 
     const {
@@ -99,6 +102,7 @@ describe('api-key', () => {
         render: () => { throw new Error() },
         html: (...args: any[]) => args,
       } as any,
+      () => true as any,
     );
 
     expect(r).eql(['<h1>403!</h1><p>Unauthorized.</p>']);
@@ -121,6 +125,7 @@ describe('api-key', () => {
     const r = apiKeyMiddleware(
       { query: {}, body: {} } as any,
       { render: () => { throw new Error() } } as any,
+      () => true as any,
     );
 
     expect(failureArgs[0]).eql({ query: {}, body: {} }); // req

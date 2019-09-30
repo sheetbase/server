@@ -83,7 +83,7 @@ export type RoutingMethod = HttpMethod | 'put' | 'patch' | 'delete';
 export type RoutingHandler = (
   req: RouteRequest,
   res: RouteResponse,
-  next?: RouteNext,
+  next: RouteNext,
 ) => any;
 
 export interface RoutingError {

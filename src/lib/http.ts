@@ -96,7 +96,7 @@ export class Http {
   ) {
     const handler = handlers.shift() as RoutingHandler;
     if (handlers.length === 0) {
-      return handler(req, res);
+      return handler(req, res, () => { throw new Error('No next().') });
     } else {
       const next: RouteNext = data => {
         if (!!data) {
