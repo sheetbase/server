@@ -82,7 +82,7 @@ export class Http {
         return result; // TextOutput or HtmlOutput
       }
     } catch (error) {
-      return res.error(error);
+      return res.error(error.message);
     }
   }
 
@@ -93,7 +93,7 @@ export class Http {
   ) {
     const handler = handlers.shift() as RoutingHandler;
     if (handlers.length === 0) {
-      return handler(req, res, () => { throw new Error('No next().') });
+      return handler(req, res, () => { throw new Error('No more handler.') });
     } else {
       const next: RouteNext = data => {
         if (!!data) {
