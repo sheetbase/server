@@ -231,6 +231,12 @@ describe('server', () => {
     expect(service.disabledRoutes).eql({a: '*'});
   });
 
+  it('#getRouteId', () => {
+    const { service } = setup();
+    const r = service.getRouteId('get', '/xxx');
+    expect(r).equal('get:/xxx');
+  });
+
   it('#getRoute (not exists)', () => {
     const { service, serviceTesting } = setup({
       isRouteDisabled: false,
@@ -329,16 +335,80 @@ describe('server', () => {
     expect(m2Result).equal('m2');
   });
 
-  it('#setRouteMiddlewares', () => {});
+  it('#setRouteMiddlewares', () => {
+    const { service } = setup();
+    const r = service.setRouteMiddlewares('get', '/', []);
+    // @ts-ignore
+    expect(service.routeMiddlewares).eql({
+      'get:/': [],
+    });
+  });
 
-  it('#setRouteMiddlewaresAll', () => {});
+  it('#setRouteMiddlewaresAll', () => {
+    const { service } = setup();
+    const r = service.setRouteMiddlewaresAll('/', []);
+    // @ts-ignore
+    expect(service.routeMiddlewares).eql({
+      'get:/': [],
+      'post:/': [],
+      'put:/': [],
+      'patch:/': [],
+      'delete:/': [],
+    });
+  });
 
-  it('#setRouteHandler', () => {});
+  it('#setRouteHandler', () => {
+    const { service } = setup();
+    const r = service.setRouteHandler('get', '/', 'handler' as any);
+    // @ts-ignore
+    expect(service.routes).eql({
+      'get:/': 'handler',
+    });
+  });
 
-  it('#setRouteHandlerAll', () => {});
+  it('#setRouteHandlerAll', () => {
+    const { service } = setup();
+    const r = service.setRouteHandlerAll('/', 'handler' as any);
+    // @ts-ignore
+    expect(service.routes).eql({
+      'get:/': 'handler',
+      'post:/': 'handler',
+      'put:/': 'handler',
+      'patch:/': 'handler',
+      'delete:/': 'handler',
+    });
+  });
 
-  it('#addRoute', () => {});
+  it('#addRoute', () => {
+    const { service, serviceTesting } = setup({
+      setRouteHandler: undefined,
+      setRouteMiddlewares: undefined,
+    });
 
-  it('#addRouteAll', () => {});
+    const r = service.addRoute('get', '/', ['handler'] as any);
+    const setRouteHandlerArgs = serviceTesting.getResult('setRouteHandler').getArgs();
+    const setRouteMiddlewaresArgs = serviceTesting.getResult('setRouteMiddlewares').getArgs();
+
+    expect(setRouteHandlerArgs).eql([
+      'get', '/', 'handler',
+    ]);
+    expect(setRouteMiddlewaresArgs).eql([
+      'get', '/', [],
+    ]);
+  });
+
+  it('#addRouteAll', () => {
+    const { service, serviceTesting } = setup({
+      setRouteHandlerAll: undefined,
+      setRouteMiddlewaresAll: undefined,
+    });
+
+    const r = service.addRouteAll('/', ['handler'] as any);
+    const setRouteHandlerAllArgs = serviceTesting.getResult('setRouteHandlerAll').getArgs();
+    const setRouteMiddlewaresAllArgs = serviceTesting.getResult('setRouteMiddlewaresAll').getArgs();
+
+    expect(setRouteHandlerAllArgs).eql(['/', 'handler']);
+    expect(setRouteMiddlewaresAllArgs).eql(['/', []]);
+  });
 
 });

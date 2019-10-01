@@ -86,6 +86,10 @@ export class Server {
     return this.disabledRoutes = disabledRoutes;
   }
 
+  getRouteId(method: RoutingMethod, endpoint: string) {
+    return method + ':' + endpoint;
+  }
+
   getRoute(method: RoutingMethod, endpoint: string) {
     const defaultHandler: RoutingHandler = (req, res) => {
       try {
@@ -99,7 +103,7 @@ export class Server {
       return [defaultHandler];
     }
     // handler stack
-    const id = method + ':' + endpoint;
+    const id = this.getRouteId(method, endpoint);
     return [
       ...this.sharedMiddlewares,
       ...(this.routeMiddlewares[id] || []),
@@ -119,7 +123,7 @@ export class Server {
     endpoint: string,
     handlers: RoutingHandler[],
   ) {
-    return this.routeMiddlewares[method + ':' + endpoint] = handlers;
+    return this.routeMiddlewares[this.getRouteId(method, endpoint)] = handlers;
   }
   
   setRouteMiddlewaresAll(
@@ -136,7 +140,7 @@ export class Server {
     endpoint: string,
     handler: RoutingHandler,
   ) {
-    return this.routes[method + ':' + endpoint] = handler;
+    return this.routes[this.getRouteId(method, endpoint)] = handler;
   }
   
   setRouteHandlerAll(

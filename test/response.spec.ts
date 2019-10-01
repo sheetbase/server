@@ -153,12 +153,18 @@ describe('response', () => {
       json: (value: any) => value,
     });
 
-    const r = service.success({ a: 1 });
+    const r1 = service.success({ a: 1 });
+    const r2 = service.success('xxx'); // any value
 
-    expect(r).eql({
+    expect(r1).eql({
       success: true,
       status: 200,
       data: { a: 1 },
+    });
+    expect(r2).eql({
+      success: true,
+      status: 200,
+      data: { value: 'xxx' },
     });
   });
 
