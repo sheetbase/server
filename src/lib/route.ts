@@ -5,21 +5,19 @@ import {
   LoggingValue,
 } from './types';
 
-import { Monitoring } from './monitoring';
+import { Main } from './main';
 import { Router } from './router';
 
 export class Route {
 
-  private MONITORING: Monitoring;
+  private MAIN: Main;
 
-  baseEndpoint = '/';
+  baseEndpoint = '';
   disabledRoutes: DisabledRoutes = {};
   routingErrors: RoutingErrors = {};
 
-  constructor(
-    MONITORING: Monitoring,
-  ) {
-    this.MONITORING = MONITORING;
+  constructor(MAIN: Main) {
+    this.MAIN = MAIN;
   }
 
   registerRoutes(ROUTER: Router) {
@@ -47,7 +45,7 @@ export class Route {
     }
   ) {
     const { level, value } = body;
-    return this.MONITORING.logging(value, level);
+    return this.MAIN.monitoring().logging(value, level);
   }
-  
+
 }

@@ -31,7 +31,7 @@ export class Main {
     this.API_KEY = new APIKey(this.SERVER);
     // routing
     this.MIDDLEWARE = new Middleware(this.SERVER, this.API_KEY);
-    this.ROUTE = new Route(this.MONITORING);
+    this.ROUTE = new Route(this);
   }
 
   /**

@@ -11,29 +11,53 @@ import {
 import { Route } from '../src/lib/route';
 
 // @lib/monitoring
-const mockedMonitoring = {};
+const mockedMonitoring = {
+  logging: '...',
+};
+
+// @lib/main
+const mockedMain = {
+  monitoring: mockService(mockedMonitoring),
+};
 
 function setup<
   ServiceStubs extends ServiceStubing<Route>,
-  MonitoringMocks extends ServiceMocking<typeof mockedMonitoring>,
+  MainMocks extends ServiceMocking<typeof mockedMain>,
 >(
   serviceStubs?: ServiceStubs,
   serviceMocks: {
-    monitoringMocks?: MonitoringMocks;
+    mainMocks?: MainMocks;
   } = {},
 ) {
   const {
-    monitoringMocks = {},
+    mainMocks = {},
   } = serviceMocks;
-  const serviceRewiring = rewireService(
+  return rewireService(
     Route,
     {
-      '@lib/monitoring': mockService({ ...mockedMonitoring, ...monitoringMocks }),
+      '@lib/main': mockService({ ...mockedMain, ...mainMocks }),
     },
     serviceStubs,
   )
-  const service = serviceRewiring.getInstance();
-  return { serviceRewiring, service };
+  .getResult();
+}
+
+class MockedRouter {
+  routeInstance: any;
+  routes: any = {};
+  extend() {
+    return this;
+  }
+  config(t: any) {
+    this.routeInstance = t;
+    return this;
+  }
+  get(e: any, h: any) {
+    this.routes['get:' + e] = h;
+  }
+  put(e: any, h: any) {
+    this.routes['put:' + e] = h;
+  }
 }
 
 describe('route', () => {
@@ -41,15 +65,50 @@ describe('route', () => {
   it('instances', () => {
     const { service } = setup();
     //@ts-ignore
-    expect(service.MONITORING instanceof MockBuilder).equal(true, '@lib/monitoring');
+    expect(service.MAIN instanceof MockBuilder).equal(true, '@lib/main');
   });
 
-  it('props', () => {});
+  it('props', () => {
+    const { service } = setup();
+    expect(service.baseEndpoint).equal('');
+    expect(service.disabledRoutes).eql({});
+    expect(service.routingErrors).eql({});
+  });
 
-  it('#registerRoutes', () => {});
+  it('#registerRoutes', () => {
+    const { service } = setup({
+      GET__system: () => ({ GET__system: null }),
+      PUT__logging: (...args: any[]) => ({ PUT__logging: args }),
+    });
 
-  it('#GET__system', () => {});
+    const router = new MockedRouter();
 
-  it('#PUT__logging', () => {});
+    service.registerRoutes(router as any);
+    const r1 = router.routes['get:/system']();
+    const r2 = router.routes['put:/logging']({
+      body: {a: 1},
+    });
+
+    expect(router.routeInstance instanceof Route).equal(true);
+    expect(r1).eql({ GET__system: null });
+    expect(r2).eql({ PUT__logging: [
+      {a: 1}, // body
+    ]});
+  });
+
+  it('#GET__system', () => {
+    const { service } = setup();
+    const r = service.GET__system();
+    expect(r).eql({ sheetbase: true });
+  });
+
+  it('#PUT__logging', () => {
+    const { service } = setup();
+    const r = service.PUT__logging({
+      level: 'debug',
+      value: 'xxx',
+    });
+    expect(r).eql([ 'xxx', 'debug' ]);
+  });
 
 });
