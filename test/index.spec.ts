@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { rewireModule } from '../../../../lamnhan.com/modules/testing/dist/src/index';
+import { rewireModule } from '@lamnhan/testing';
 
 class MockedMain {}
 

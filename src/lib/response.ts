@@ -1,5 +1,5 @@
 import { RoutingError, ViewEngine } from './types';
-import { Server } from './server';
+import { ServerService } from './server';
 
 declare const ejs: {
   render: (templateText: string, data: {}) => string;
@@ -9,17 +9,11 @@ declare const Handlebars: {
   compile(templateText: string): (data: {}) => string;
 };
 
-export class Response {
-
-  private SERVER: Server;
+export class ResponseService {
 
   private allowedExtensions = ['gs', 'hbs', 'ejs'];
 
-  constructor(
-    SERVER: Server,
-  ) {
-    this.SERVER = SERVER;
-  }
+  constructor(private serverService: ServerService) {}
 
   send<Data>(data: string | Data) {
     if (typeof data === 'string') {
@@ -62,7 +56,7 @@ export class Response {
     }
     // a code or message
     else if (typeof input === 'string') {
-      const { [input]: error } = this.SERVER.getRoutingErrors();
+      const { [input]: error } = this.serverService.getRoutingErrors();
       // a message
       if (!error ) {
         theError = {
@@ -112,7 +106,7 @@ export class Response {
   ) {
     // turn file into the templating
     if (typeof templating === 'string') {
-      const { views } = this.SERVER.getOptions();
+      const { views } = this.serverService.getOptions();
       // extract file name & extension
       const fileName = templating;
       const fileExt = fileName.split('.').pop() as string;

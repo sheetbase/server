@@ -1,9 +1,9 @@
 // tslint:disable: no-any
-import { Response } from './response';
+import { ResponseService } from './response';
 
 export interface Options {
   /**
-   * The template folder
+   * The view template folder
    */
   views?: string;
   /**
@@ -64,7 +64,7 @@ export interface RouteRequest {
   data: any;
 }
 
-export interface RouteResponse extends Response {}
+export interface RouteResponse extends ResponseService {}
 
 export type RouteNext = (data?: {}) => RoutingHandler;
 

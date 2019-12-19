@@ -2,10 +2,10 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "./dist/esm3",
-    "declarationDir": "./dist",
-    "module": "esnext",
-    "target": "es3"
+    "outDir": "./dist",
+    "target": "es3",
+	  "module": "es2015",
+    "skipLibCheck": true
   },
   "files": [
     "src/public-api.ts"

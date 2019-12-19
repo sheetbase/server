@@ -1,11 +1,11 @@
 // tslint:disable: no-any
 import { expect } from 'chai';
-import { sinon } from '../../../../lamnhan.com/modules/testing/dist/src/index';
+import { sinon } from '@lamnhan/testing';
 
-import { Monitoring } from '../src/lib/monitoring';
+import { MonitoringService } from '../src/lib/monitoring';
 
 function setup() {
-  return new Monitoring();
+  return new MonitoringService();
 }
 
 describe('monitoring', () => {

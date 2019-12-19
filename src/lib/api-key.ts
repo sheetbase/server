@@ -1,17 +1,11 @@
-import { Server } from './server';
+import { ServerService } from './server';
 
-export class APIKey {
+export class APIKeyService {
 
-  private SERVER: Server;
-
-  constructor(
-    SERVER: Server,
-  ) {
-    this.SERVER = SERVER;
-  }
+  constructor(private serverService: ServerService) {}
 
   getApiKeys() {
-    const { apiKeys = {}, key } = this.SERVER.getOptions();
+    const { apiKeys = {}, key } = this.serverService.getOptions();
     if (!!key) {
       apiKeys[key] = { title: 'Default' };
     }

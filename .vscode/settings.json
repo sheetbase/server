@@ -1,9 +1,11 @@
 {
   "files.exclude": {
     ".vscode/": true,
+    "docs/": true,
     ".nyc_output/": true,
-    "**/*.js": true,
-    "dist/": true,
-    "docs/": true
+    "src/**/*.js": true,
+    "test/**/*.js": true,
+    "**/*.d.ts": true,
+    "**/*.map": true
   }
 }

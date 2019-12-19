@@ -3,35 +3,35 @@ import { expect } from 'chai';
 import {
   ServiceStubing,
   rewireFull,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
+} from '@lamnhan/testing';
 
 import { Main } from '../src/lib/main';
 
 // @lib/server
-class MockedServer {}
+class MockedServerService {}
 
 // @lib/response
-class MockedResponse {}
+class MockedResponseService {}
 
 // @lib/router
-class MockedRouter {}
+class MockedRouterService {}
 
 // @lib/http
-class MockedHttp {}
+class MockedHttpService {}
 
 // @lib/monitoring
-class MockedMonitoring {}
+class MockedMonitoringService {}
 
 // @lib/api-key
-class MockedAPIKey {}
+class MockedAPIKeyService {}
 
 // @lib/middleware
-class MockedMiddleware {}
+class MockedMiddlewareService {}
 
 // @lib/route
-class MockedRoute {
-  registerRoutes(...args: any[]) {
-    return args;
+class MockedRouteService {
+  registerRoutes() {
+    return true;
   }
 }
 
@@ -43,14 +43,14 @@ function setup<
   return rewireFull(
     '@lib/main',
     {
-      '@lib/server': { Server: MockedServer },
-      '@lib/response': { Response: MockedResponse },
-      '@lib/router': { Router: MockedRouter },
-      '@lib/http': { Http: MockedHttp },
-      '@lib/monitoring': { Monitoring: MockedMonitoring },
-      '@lib/api-key': { APIKey: MockedAPIKey },
-      '@lib/middleware': { Middleware: MockedMiddleware },
-      '@lib/route': { Route: MockedRoute },
+      '@lib/server': { ServerService: MockedServerService },
+      '@lib/response': { ResponseService: MockedResponseService },
+      '@lib/router': { RouterService: MockedRouterService },
+      '@lib/http': { HttpService: MockedHttpService },
+      '@lib/monitoring': { MonitoringService: MockedMonitoringService },
+      '@lib/api-key': { APIKeyService: MockedAPIKeyService },
+      '@lib/middleware': { MiddlewareService: MockedMiddlewareService },
+      '@lib/route': { RouteService: MockedRouteService },
     },
     Main,
     undefined,
@@ -63,58 +63,20 @@ describe('main', () => {
 
   it('instances', async () => {
     const { service } = await setup();
-    //@ts-ignore
-    expect(service.SERVER instanceof MockedServer).equal(true, '@lib/server');
-    //@ts-ignore
-    expect(service.RESPONSE instanceof MockedResponse).equal(true, '@lib/response');
-    //@ts-ignore
-    expect(service.ROUTER instanceof MockedRouter).equal(true, '@lib/router');
-    //@ts-ignore
-    expect(service.HTTP instanceof MockedHttp).equal(true, '@lib/http');
-    //@ts-ignore
-    expect(service.MONITORING instanceof MockedMonitoring).equal(true, '@lib/monitoring');
-    //@ts-ignore
-    expect(service.API_KEY instanceof MockedAPIKey).equal(true, '@lib/api-key');
-    //@ts-ignore
-    expect(service.MIDDLEWARE instanceof MockedMiddleware).equal(true, '@lib/middleware');
-    //@ts-ignore
-    expect(service.ROUTE instanceof MockedRoute).equal(true, '@lib/route');
-  });
-
-  it('#server', async () => {
-    const { service } = await setup();
-    const r = service.server();
-    expect(r instanceof MockedServer).equal(true);
-  });
-
-  it('#router', async () => {
-    const { service } = await setup();
-    const r = service.router();
-    expect(r instanceof MockedRouter).equal(true);
-  });
-
-  it('#http', async () => {
-    const { service } = await setup();
-    const r = service.http();
-    expect(r instanceof MockedHttp).equal(true);
-  });
-
-  it('#monitoring', async () => {
-    const { service } = await setup();
-    const r = service.monitoring();
-    expect(r instanceof MockedMonitoring).equal(true);
-  });
-
-  it('#middleware', async () => {
-    const { service } = await setup();
-    const r = service.middleware();
-    expect(r instanceof MockedMiddleware).equal(true);
+    expect(service.serverService instanceof MockedServerService).equal(true, '@lib/server');
+    expect(service.responseService instanceof MockedResponseService).equal(true, '@lib/response');
+    expect(service.routerService instanceof MockedRouterService).equal(true, '@lib/router');
+    expect(service.httpService instanceof MockedHttpService).equal(true, '@lib/http');
+    expect(service.monitoringService instanceof MockedMonitoringService).equal(true, '@lib/monitoring');
+    expect(service.apiKeyService instanceof MockedAPIKeyService).equal(true, '@lib/api-key');
+    expect(service.middlewareService instanceof MockedMiddlewareService).equal(true, '@lib/middleware');
+    expect(service.routeService instanceof MockedRouteService).equal(true, '@lib/route');
   });
 
   it('#registerRoutes', async () => {
     const { service } = await setup();
     const r: any = service.registerRoutes();
-    expect(r[0] instanceof MockedRouter).eql(true);
+    expect(r).equal(true);
   });
 
 });

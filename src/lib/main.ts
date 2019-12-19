@@ -1,79 +1,52 @@
 import { Options } from './types';
-
-import { Server } from './server';
-import { Response } from './response';
-import { Router } from './router';
-import { Http } from './http';
-import { Monitoring } from './monitoring';
-import { APIKey } from './api-key';
-import { Middleware } from './middleware';
-import { Route } from './route';
+import { ServerService } from './server';
+import { ResponseService } from './response';
+import { RouterService } from './router';
+import { HttpService } from './http';
+import { MonitoringService } from './monitoring';
+import { APIKeyService } from './api-key';
+import { MiddlewareService } from './middleware';
+import { RouteService } from './route';
 
 export class Main {
-  
-  private SERVER: Server;
-  private RESPONSE: Response;
-  private ROUTER: Router;
-  private HTTP: Http;
-  private MONITORING: Monitoring;
-  private API_KEY: APIKey;
-  private MIDDLEWARE: Middleware;
-  private ROUTE: Route;
+
+  serverService: ServerService;
+  responseService: ResponseService;
+  routerService: RouterService;
+  httpService: HttpService;
+  monitoringService: MonitoringService;
+  apiKeyService: APIKeyService;
+  middlewareService: MiddlewareService;
+  routeService: RouteService;
 
   constructor(options?: Options) {
     // main
-    this.SERVER = new Server(options);
+    this.serverService = new ServerService(options);
     // members
-    this.RESPONSE = new Response(this.SERVER);
-    this.ROUTER = new Router(this.SERVER);
-    this.HTTP = new Http(this.SERVER, this.RESPONSE);
-    this.MONITORING = new Monitoring();
-    this.API_KEY = new APIKey(this.SERVER);
+    this.responseService = new ResponseService(this.serverService);
+    this.routerService = new RouterService(this.serverService);
+    this.httpService = new HttpService(
+      this.serverService,
+      this.responseService
+    );
+    this.monitoringService = new MonitoringService();
+    this.apiKeyService = new APIKeyService(this.serverService);
     // routing
-    this.MIDDLEWARE = new Middleware(this.SERVER, this.API_KEY);
-    this.ROUTE = new Route(this);
-  }
-
-  /**
-   * Get the Server instance
-   */
-  server() {
-    return this.SERVER;
-  }
-
-  /**
-   * Get the Router instance
-   */
-  router() {
-    return this.ROUTER;
-  }
-
-  /**
-   * Get the Http instance
-   */
-  http() {
-    return this.HTTP;
-  }
-
-  /**
-   * Get the Monitoring instance
-   */
-  monitoring() {
-    return this.MONITORING;
-  }
-
-  /**
-   * Get the Middleware instance
-   */
-  middleware() {
-    return this.MIDDLEWARE;
+    this.middlewareService = new MiddlewareService(
+      this.serverService,
+      this.apiKeyService
+    );
+    this.routeService = new RouteService(
+      this.routerService,
+      this.monitoringService,
+    );
   }
 
   /**
    * Expose the module routes
    */
   registerRoutes() {
-    return this.ROUTE.registerRoutes(this.ROUTER);
+    return this.routeService.registerRoutes();
   }
 
 }

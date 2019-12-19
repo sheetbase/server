@@ -7,22 +7,14 @@ import {
   RoutingMethod,
   RoutingHandler,
 } from './types';
+import { ServerService } from './server';
+import { ResponseService } from './response';
 
-import { Server } from './server';
-import { Response } from './response';
-
-export class Http {
-
-  private SERVER: Server;
-  private RESPONSE: Response;
-
+export class HttpService {
   constructor(
-    SERVER: Server,
-    RESPONSE: Response,
-  ) {
-    this.SERVER = SERVER;
-    this.RESPONSE = RESPONSE;
-  }
+    private serverService: ServerService,
+    private responseService: ResponseService,
+  ) {}
 
   get(e: HttpEvent) {
     return this.handler('get', e);
@@ -48,13 +40,13 @@ export class Http {
   }
 
   getMethod(httpMethod: HttpMethod, customMethod?: RoutingMethod) {
-    return !!customMethod && this.SERVER.isMethodValid(customMethod)
+    return !!customMethod && this.serverService.isMethodValid(customMethod)
       ? customMethod
       : httpMethod;
   }
 
   getEndpoint(eParam = '') {
-    return this.SERVER.resolveEndpoint(eParam);
+    return this.serverService.resolveEndpoint(eParam);
   }
 
   handler(httpMethod: HttpMethod, httpEvent: HttpEvent) {
@@ -62,13 +54,13 @@ export class Http {
     const query = this.extractQuery(httpEvent);
     const body = this.extractBody(httpEvent);
     // get handlers
-    const handlers = this.SERVER.getRoute(
+    const handlers = this.serverService.getRoute(
       this.getMethod(httpMethod, query.method),
       this.getEndpoint(query.e),
     );
     // req & res
     const req = { query, body, data: {} } as RouteRequest;
-    const res = this.RESPONSE as RouteResponse;
+    const res = this.responseService as RouteResponse;
     // execute
     try {
       const result = this.execute(handlers, req, res);

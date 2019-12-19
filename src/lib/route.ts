@@ -1,27 +1,23 @@
 import {
-  DisabledRoutes,
-  RoutingErrors,
   LoggingLevel,
   LoggingValue,
 } from './types';
+import { RouterService } from './router';
+import { MonitoringService } from './monitoring';
 
-import { Main } from './main';
-import { Router } from './router';
-
-export class Route {
-
-  private MAIN: Main;
+export class RouteService {
 
   baseEndpoint = '';
-  disabledRoutes: DisabledRoutes = {};
-  routingErrors: RoutingErrors = {};
 
-  constructor(MAIN: Main) {
-    this.MAIN = MAIN;
-  }
+  constructor(
+    private routerService: RouterService,
+    private monitoringService: MonitoringService
+  ) {}
 
-  registerRoutes(ROUTER: Router) {
-    const router = ROUTER.extend().config(this);
+  registerRoutes() {
+    const router = this.routerService
+      .extend()
+      .config(this);
     router.get('/system', () => this.GET__system());
     router.put('/logging', (req) => this.PUT__logging(req.body));
   }
@@ -35,17 +31,17 @@ export class Route {
 
   /**
    * Set a server log
-   * @param body.level - The logging level
-   * @param body.value - The logging value
+   * @params body.level - The logging level
+   * @params body.value - The logging value
    */
   PUT__logging(
     body: {
-      level: LoggingLevel,
-      value: LoggingValue,
+      level: LoggingLevel;
+      value: LoggingValue;
     }
   ) {
     const { level, value } = body;
-    return this.MAIN.monitoring().logging(value, level);
+    return this.monitoringService.logging(value, level);
   }
 
 }

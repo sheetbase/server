@@ -6,9 +6,9 @@ import {
   MockBuilder,
   mockService,
   rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
+} from '@lamnhan/testing';
 
-import { Router } from '../src/lib/router';
+import { RouterService } from '../src/lib/router';
 
 // @lib/server
 const mockedServer = {
@@ -23,7 +23,7 @@ const mockedServer = {
 };
 
 function setup<
-  ServiceStubs extends ServiceStubing<Router>,
+  ServiceStubs extends ServiceStubing<RouterService>,
   ServerMocks extends ServiceMocking<typeof mockedServer>,
 >(
   serviceStubs?: ServiceStubs,
@@ -35,7 +35,7 @@ function setup<
     serverMocks = {},
   } = serviceMocks;
   return rewireService(
-    Router,
+    RouterService,
     {
       '@lib/server': mockService({ ...mockedServer, ...serverMocks }),
     },
@@ -49,7 +49,7 @@ describe('router', () => {
   it('instances', () => {
     const { service } = setup();
     //@ts-ignore
-    expect(service.SERVER instanceof MockBuilder).equal(true, '@lib/server');
+    expect(service.serverService instanceof MockBuilder).equal(true, '@lib/server');
   });
 
   it('props', () => {
@@ -61,7 +61,7 @@ describe('router', () => {
   it('#extend', () => {
     const { service } = setup();
     const r = service.extend();
-    expect(r instanceof Router).equal(true);
+    expect(r instanceof RouterService).equal(true);
   });
 
   it('#config (no values)', () => {
@@ -82,7 +82,7 @@ describe('router', () => {
     expect(setEndpointCalled).equal(false, 'setEndpoint');
     expect(setErrorsCalled).equal(false, 'setErrors');
     expect(setDisabledCalled).equal(false, 'setDisabled');
-    expect(r instanceof Router).equal(true);
+    expect(r instanceof RouterService).equal(true);
   });
 
   it('#config (has values)', () => {
@@ -107,7 +107,7 @@ describe('router', () => {
     expect(setEndpointArg).equal('xxx');
     expect(setErrorsArg).eql({error: 'Error'});
     expect(setDisabledArg).eql({a: ['get']});
-    expect(r instanceof Router).equal(true);
+    expect(r instanceof RouterService).equal(true);
   });
 
   it('#setEndpoint', () => {
@@ -117,7 +117,7 @@ describe('router', () => {
 
     //@ts-ignore
     expect(r.baseEndpoint).equal('xxx');
-    expect(r instanceof Router).equal(true);
+    expect(r instanceof RouterService).equal(true);
   });
 
   it('#setErrors', () => {
@@ -132,7 +132,7 @@ describe('router', () => {
     const addRoutingErrorsArg = serverTesting.getResult('addRoutingErrors').getArgFirst();
 
     expect(addRoutingErrorsArg).eql({error: 'Error'});
-    expect(r instanceof Router).equal(true);
+    expect(r instanceof RouterService).equal(true);
   });
 
   it('#setDisabled', () => {
@@ -147,7 +147,7 @@ describe('router', () => {
     const addDisabledRoutesArg = serverTesting.getResult('addDisabledRoutes').getArgFirst();
 
     expect(addDisabledRoutesArg).eql({a: ['get']});
-    expect(r instanceof Router).equal(true);
+    expect(r instanceof RouterService).equal(true);
   });
 
   it('#buildEndpoint', () => {

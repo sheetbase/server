@@ -1,6 +1,6 @@
 import { LoggingLevel, LoggingValue } from './types';
 
-export class Monitoring {
+export class MonitoringService {
 
   constructor() {}
 

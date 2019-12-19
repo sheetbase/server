@@ -6,41 +6,19 @@ import {
   MockBuilder,
   mockService,
   rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
+} from '@lamnhan/testing';
 
-import { Route } from '../src/lib/route';
+import { RouteService } from '../src/lib/route';
+
+// @lib/router
+const mockedRouter = {
+  
+};
 
 // @lib/monitoring
 const mockedMonitoring = {
   logging: '...',
 };
-
-// @lib/main
-const mockedMain = {
-  monitoring: mockService(mockedMonitoring),
-};
-
-function setup<
-  ServiceStubs extends ServiceStubing<Route>,
-  MainMocks extends ServiceMocking<typeof mockedMain>,
->(
-  serviceStubs?: ServiceStubs,
-  serviceMocks: {
-    mainMocks?: MainMocks;
-  } = {},
-) {
-  const {
-    mainMocks = {},
-  } = serviceMocks;
-  return rewireService(
-    Route,
-    {
-      '@lib/main': mockService({ ...mockedMain, ...mainMocks }),
-    },
-    serviceStubs,
-  )
-  .getResult();
-}
 
 class MockedRouter {
   routeInstance: any;
@@ -60,19 +38,43 @@ class MockedRouter {
   }
 }
 
+function setup<
+  ServiceStubs extends ServiceStubing<RouteService>,
+  RouterMocks extends ServiceMocking<typeof mockedRouter>,
+  MonitoringMocks extends ServiceMocking<typeof mockedMonitoring>,
+>(
+  serviceStubs?: ServiceStubs,
+  serviceMocks: {
+    routerMocks?: RouterMocks;
+    monotoringMocks?: MonitoringMocks;
+  } = {},
+) {
+  const {
+    routerMocks = {},
+    monotoringMocks = {},
+  } = serviceMocks;
+  return rewireService(
+    RouteService,
+    {
+      '@lib/router': mockService({ ...mockedRouter, ...routerMocks }),
+      '@lib/monitoring': mockService({ ...mockedMonitoring, ...monotoringMocks }),
+    },
+    serviceStubs,
+  )
+  .getResult();
+}
+
 describe('route', () => {
 
   it('instances', () => {
     const { service } = setup();
     //@ts-ignore
-    expect(service.MAIN instanceof MockBuilder).equal(true, '@lib/main');
+    expect(service.monitoringService instanceof MockBuilder).equal(true, '@lib/main');
   });
 
   it('props', () => {
     const { service } = setup();
     expect(service.baseEndpoint).equal('');
-    expect(service.disabledRoutes).eql({});
-    expect(service.routingErrors).eql({});
   });
 
   it('#registerRoutes', () => {
@@ -83,13 +85,13 @@ describe('route', () => {
 
     const router = new MockedRouter();
 
-    service.registerRoutes(router as any);
+    service.registerRoutes();
     const r1 = router.routes['get:/system']();
     const r2 = router.routes['put:/logging']({
       body: {a: 1},
     });
 
-    expect(router.routeInstance instanceof Route).equal(true);
+    expect(router.routeInstance instanceof RouteService).equal(true);
     expect(r1).eql({ GET__system: null });
     expect(r2).eql({ PUT__logging: [
       {a: 1}, // body

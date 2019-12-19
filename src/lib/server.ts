@@ -11,7 +11,7 @@ import {
   RouteMiddlewares,
 } from './types';
 
-export class Server {
+export class ServerService {
 
   private options: Options;
 

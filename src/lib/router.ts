@@ -4,20 +4,16 @@ import {
   RoutingHandler,
   RoutingErrors,
 } from './types';
-import { Server } from './server';
+import { ServerService } from './server';
 
-export class Router {
-
-  private SERVER: Server;
+export class RouterService {
 
   private baseEndpoint = '';
 
-  constructor(SERVER: Server) {
-    this.SERVER = SERVER;
-  }
+  constructor(private serverService: ServerService) {}
 
   extend() {
-    return new Router(this.SERVER);
+    return new RouterService(this.serverService);
   }
 
   config(routeInstance: RouteInstance) {
@@ -34,52 +30,52 @@ export class Router {
   }
 
   setErrors(errors: RoutingErrors) {
-    this.SERVER.addRoutingErrors(errors);
+    this.serverService.addRoutingErrors(errors);
     return this;
   }
 
   setDisabled(disabled: DisabledRoutes) {
-    this.SERVER.addDisabledRoutes(disabled);
+    this.serverService.addDisabledRoutes(disabled);
     return this;
   }
 
   buildEndpoint(segment: string) {
-    return this.SERVER.resolveEndpoint(this.baseEndpoint, segment);
+    return this.serverService.resolveEndpoint(this.baseEndpoint, segment);
   }
 
   use(...handlers: Array<string | RoutingHandler>) {
     return typeof handlers[0] === 'string'
       // for a route
-      ? this.SERVER.setRouteMiddlewaresAll(
+      ? this.serverService.setRouteMiddlewaresAll(
           this.buildEndpoint(handlers.shift() as string),
           handlers as RoutingHandler[],
         )
       // for all routes
-      : this.SERVER.addSharedMiddlewares(handlers as RoutingHandler[]);
+      : this.serverService.addSharedMiddlewares(handlers as RoutingHandler[]);
   }
 
   all(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRouteAll(this.buildEndpoint(endpoint), handlers);
+    this.serverService.addRouteAll(this.buildEndpoint(endpoint), handlers);
   }
 
   get(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('get', this.buildEndpoint(endpoint), handlers);
+    this.serverService.addRoute('get', this.buildEndpoint(endpoint), handlers);
   }
 
   post(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('post', this.buildEndpoint(endpoint), handlers);
+    this.serverService.addRoute('post', this.buildEndpoint(endpoint), handlers);
   }
 
   put(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('put', this.buildEndpoint(endpoint), handlers);
+    this.serverService.addRoute('put', this.buildEndpoint(endpoint), handlers);
   }
 
   patch(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('patch', this.buildEndpoint(endpoint), handlers);
+    this.serverService.addRoute('patch', this.buildEndpoint(endpoint), handlers);
   }
 
   delete(endpoint: string, ...handlers: RoutingHandler[]) {
-    this.SERVER.addRoute('delete', this.buildEndpoint(endpoint), handlers);
+    this.serverService.addRoute('delete', this.buildEndpoint(endpoint), handlers);
   }
 
 }

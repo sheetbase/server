@@ -6,9 +6,9 @@ import {
   MockBuilder,
   mockService,
   rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
+} from '@lamnhan/testing';
 
-import { Response } from '../src/lib/response';
+import { ResponseService } from '../src/lib/response';
 
 // @lib/server
 const mockedServer = {
@@ -17,7 +17,7 @@ const mockedServer = {
 };
 
 function setup<
-  ServiceStubs extends ServiceStubing<Response>,
+  ServiceStubs extends ServiceStubing<ResponseService>,
   ServerMocks extends ServiceMocking<typeof mockedServer>,
 >(
   serviceStubs?: ServiceStubs,
@@ -29,7 +29,7 @@ function setup<
     serverMocks = {},
   } = serviceMocks;
   const serviceRewiring = rewireService(
-    Response,
+    ResponseService,
     {
       '@lib/server': mockService({ ...mockedServer, ...serverMocks }),
     },
@@ -94,7 +94,7 @@ describe('response', () => {
   it('instances', () => {
     const { service } = setup();
     //@ts-ignore
-    expect(service.SERVER instanceof MockBuilder).equal(true, '@lib/server');
+    expect(service.serverService instanceof MockBuilder).equal(true, '@lib/server');
   });
   
   it('props', () => {

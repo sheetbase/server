@@ -6,9 +6,9 @@ import {
   MockBuilder,
   mockService,
   rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
+} from '@lamnhan/testing';
 
-import { Middleware } from '../src/lib/middleware';
+import { MiddlewareService } from '../src/lib/middleware';
 
 // @lib/server
 const mockedServer = {
@@ -21,7 +21,7 @@ const mockedAPIKey = {
 };
 
 function setup<
-  ServiceStubs extends ServiceStubing<Middleware>,
+  ServiceStubs extends ServiceStubing<MiddlewareService>,
   ServerMocks extends ServiceMocking<typeof mockedServer>,
   APIKeyMocks extends ServiceMocking<typeof mockedAPIKey>,
 >(
@@ -36,7 +36,7 @@ function setup<
     apiKeyMocks = {},
   } = serviceMocks;
   const serviceRewiring = rewireService(
-    Middleware,
+    MiddlewareService,
     {
       '@lib/server': mockService({ ...mockedServer, ...serverMocks }),
       '@lib/api-key': mockService({ ...mockedAPIKey, ...apiKeyMocks }),
@@ -52,9 +52,9 @@ describe('api-key', () => {
   it('instances', () => {
     const { service } = setup();
     // @ts-ignore
-    expect(service.SERVER instanceof MockBuilder).equal(true, '@lib/server');
+    expect(service.serverService instanceof MockBuilder).equal(true, '@lib/server');
     // @ts-ignore
-    expect(service.API_KEY instanceof MockBuilder).equal(true, '@lib/api-key');
+    expect(service.apiKeyService instanceof MockBuilder).equal(true, '@lib/api-key');
   });
   
   it('failed (#render)', () => {

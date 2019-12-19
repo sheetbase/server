@@ -8,12 +8,12 @@
   "files": [
     "dist"
   ],
-  "main": "dist/bundles/sheetbase-server.umd.js",
-  "module": "dist/fesm3/sheetbase-server.js",
+  "main": "dist/sheetbase-server.js",
+  "module": "dist/sheetbase-server.esm.js",
   "typings": "dist/sheetbase-server.d.ts",
   "scripts": {
     "build": "sheetbase-app-scripts build",
-    "docs": "sheetbase-app-scripts docs",
+    "docs": "ayedocs generate",
     "lint": "gts check",
     "fix": "gts fix",
     "test": "tsc -p tsconfig-test.json && nyc --cache false mocha test/**/*.js",
@@ -36,16 +36,16 @@
   "dependencies": {},
   "devDependencies": {
     "@lamnhan/testing": "0.0.5",
-    "@sheetbase/app-scripts": "^2.0.0-beta",
-    "@types/chai": "^4.2.2",
-    "@types/google-apps-script": "^0.0.59",
+    "@sheetbase/app-scripts": "3.0.0-beta",
+    "@types/chai": "^4.2.7",
+    "@types/google-apps-script": "^1.0.7",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.5",
+    "@types/node": "^12.12.21",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.6",
-    "gts": "^1.1.0",
-    "mocha": "^6.2.0",
+    "coveralls": "^3.0.9",
+    "gts": "^1.1.2",
+    "mocha": "^6.2.2",
     "nyc": "^14.1.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.3"
   }
 }

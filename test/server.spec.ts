@@ -3,17 +3,17 @@ import { expect } from 'chai';
 import {
   ServiceStubing,
   rewireService,
-} from '../../../../lamnhan.com/modules/testing/dist/src/index';
+} from '@lamnhan/testing';
 
-import { Server } from '../src/lib/server';
+import { ServerService } from '../src/lib/server';
 
 function setup<
-  ServiceStubs extends ServiceStubing<Server>,
+  ServiceStubs extends ServiceStubing<ServerService>,
 >(
   serviceStubs?: ServiceStubs,
 ) {
   return rewireService(
-    Server,
+    ServerService,
     undefined,
     serviceStubs,
   )
@@ -23,13 +23,13 @@ function setup<
 describe('server', () => {
 
   it('options (default)', () => {
-    const service = new Server();
+    const service = new ServerService();
     // @ts-ignore
     expect(service.options).eql({ views: '' });
   });
 
   it('options (custom)', () => {
-    const service = new Server({
+    const service = new ServerService({
       views: 'views',
       key: 'xxx',
       apiKeys: {
@@ -53,7 +53,7 @@ describe('server', () => {
   });
 
   it('props', () => {
-    const service = new Server();
+    const service = new ServerService();
     // @ts-ignore
     expect(service.routingErrors).eql({});
     // @ts-ignore
