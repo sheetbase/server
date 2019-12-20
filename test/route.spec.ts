@@ -12,31 +12,27 @@ import { RouteService } from '../src/lib/route';
 
 // @lib/router
 const mockedRouter = {
-  
+  routeInstance: null,
+  routes: {} as any,
+  extend() {
+    return mockedRouter;
+  },
+  config(t: any) {
+    mockedRouter.routeInstance = t;
+    return mockedRouter;
+  },
+  get(e: any, h: any) {
+    mockedRouter.routes['get:' + e] = h;
+  },
+  put(e: any, h: any) {
+    mockedRouter.routes['put:' + e] = h;
+  }
 };
 
 // @lib/monitoring
 const mockedMonitoring = {
   logging: '...',
 };
-
-class MockedRouter {
-  routeInstance: any;
-  routes: any = {};
-  extend() {
-    return this;
-  }
-  config(t: any) {
-    this.routeInstance = t;
-    return this;
-  }
-  get(e: any, h: any) {
-    this.routes['get:' + e] = h;
-  }
-  put(e: any, h: any) {
-    this.routes['put:' + e] = h;
-  }
-}
 
 function setup<
   ServiceStubs extends ServiceStubing<RouteService>,
@@ -83,13 +79,9 @@ describe('route', () => {
       PUT__logging: (...args: any[]) => ({ PUT__logging: args }),
     });
 
-    const router = new MockedRouter();
-
-    service.registerRoutes();
+    const router: any = service.registerRoutes();
     const r1 = router.routes['get:/system']();
-    const r2 = router.routes['put:/logging']({
-      body: {a: 1},
-    });
+    const r2 = router.routes['put:/logging']({ body: {a: 1} });
 
     expect(router.routeInstance instanceof RouteService).equal(true);
     expect(r1).eql({ GET__system: null });

@@ -20,6 +20,7 @@ export class RouteService {
       .config(this);
     router.get('/system', () => this.GET__system());
     router.put('/logging', (req) => this.PUT__logging(req.body));
+    return router;
   }
 
   /**
