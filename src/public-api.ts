@@ -1,12 +1,14 @@
-export * from './lib/index';
-export * from './lib/types';
-export * from './lib/main';
+export {Lib as ServerModule} from './lib/index';
 
-export * from './lib/api-key';
-export * from './lib/http';
-export * from './lib/middleware';
-export * from './lib/monitoring';
-export * from './lib/response';
-export * from './lib/route';
-export * from './lib/router';
-export * from './lib/server';
+export * from './lib/types';
+
+export * from './lib/services/api-key.service';
+export * from './lib/services/http.service';
+export * from './lib/services/middleware.service';
+export * from './lib/services/monitoring.service';
+export * from './lib/services/response.service';
+export * from './lib/services/router.service';
+export * from './lib/services/server.service';
+
+export * from './lib/routes/logging.route';
+export * from './lib/routes/system.route';

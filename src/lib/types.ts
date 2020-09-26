@@ -1,5 +1,5 @@
-// tslint:disable: no-any
-import { ResponseService } from './response';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {ResponseService} from './services/response.service';
 
 export interface Options {
   /**
@@ -34,7 +34,7 @@ export interface ApiKey {
 
 export interface ApiKeys {
   [key: string]: ApiKey;
-};
+}
 
 export type HttpMethod = 'get' | 'post';
 
@@ -52,10 +52,26 @@ export interface HttpEvent {
   };
 }
 
-export interface RouteInstance {
+export interface RouterExtending {
   baseEndpoint?: string;
   disabledRoutes?: DisabledRoutes;
   routingErrors?: RoutingErrors;
+}
+
+export interface RouteGroup extends RouterExtending {
+  [method: string]: any;
+}
+
+export interface RouteSet {
+  endpoint: string;
+  disabled?: DisabledRouteValue;
+  errors?: RoutingErrors;
+  all?(req: RouteRequest, res: RouteResponse): any;
+  get?(req: RouteRequest, res: RouteResponse): any;
+  post?(req: RouteRequest, res: RouteResponse): any;
+  put?(req: RouteRequest, res: RouteResponse): any;
+  patch?(req: RouteRequest, res: RouteResponse): any;
+  delete?(req: RouteRequest, res: RouteResponse): any;
 }
 
 export interface RouteRequest {
@@ -64,7 +80,7 @@ export interface RouteRequest {
   data: any;
 }
 
-export interface RouteResponse extends ResponseService {}
+export type RouteResponse = ResponseService;
 
 export type RouteNext = (data?: {}) => RoutingHandler;
 
@@ -83,7 +99,7 @@ export type RoutingMethod = HttpMethod | 'put' | 'patch' | 'delete';
 export type RoutingHandler = (
   req: RouteRequest,
   res: RouteResponse,
-  next: RouteNext,
+  next: RouteNext
 ) => any;
 
 export interface RoutingError {

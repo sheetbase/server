@@ -1,10 +1,8 @@
 node_modules/
-
-# dist
+# testing
+.nyc_output/
+# distribution
 src/**/*.js
 test/**/*.js
 *.map
 *.d.ts
-
-# test
-.nyc_output/
