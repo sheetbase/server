@@ -10,17 +10,20 @@
 
 - [Installation](#installation)
 - [Options](#options)
-- [Main](#main)
-  - [Main properties](#main-properties)
-  - [Main methods](#main-methods)
-    - [`registerRoutes()`](#main-registerroutes-0)
+- [Lib](#lib)
+  - [Lib properties](#lib-properties)
+  - [Lib methods](#lib-methods)
+    - [`registerRoutes(routeEnabling?)`](#lib-registerroutes-0)
 - [Routing](#routing)
-  - [Endpoint](#routing-endpoint)
+  - [Errors](#routing-errors)
   - [Routes](#routing-routes)
     - [Routes overview](#routing-routes-overview)
     - [Routes detail](#routing-routes-detail)
-      - [`GET` /system](#GET__system)
+      - [`GET` /e0](#GET__e0)
+      - [`GET` /group2/e1](#GET__group2_e1)
+      - [`POST` /group2/e2](#POST__group2_e2)
       - [`PUT` /logging](#PUT__logging)
+      - [`GET` /system](#GET__system)
 - [Detail API reference](https://sheetbase.github.io/server)
 
 
@@ -36,14 +39,19 @@
 - Usage:
 
 ```ts
-// 1. import constructor
-import { server } from "@sheetbase/server";
+// 1. import module
+import { ServerModule } from "@sheetbase/server";
 
 // 2. create an instance
-const ServerModule = server(/* options */);
+export class App {
+  // the object
+  serverModule: ServerModule;
 
-// 3. start using
-const getOptions = ServerModule.getOptions();
+  // initiate the instance
+  constructor() {
+    this.serverModule = new ServerModule(/* options */);
+  }
+}
 ```
 
 </section>
@@ -56,45 +64,54 @@ const getOptions = ServerModule.getOptions();
 | Name                                                                           | Type                                                                                                          | Description                           |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | [apiKeys?](https://sheetbase.github.io/server/interfaces/options.html#apikeys) | <code><a href="https://sheetbase.github.io/server/interfaces/apikeys.html" target="_blank">ApiKeys</a></code> | Multiple api keys                     |
-| [failure?](https://sheetbase.github.io/server/interfaces/options.html#failure) | <code>function</code>                                                                                         | Handler for invalid api key           |
-| [key?](https://sheetbase.github.io/server/interfaces/options.html#key)         | <code>string</code>                                                                                           | Single api key                        |
-| [trigger?](https://sheetbase.github.io/server/interfaces/options.html#trigger) | <code>function</code>                                                                                         | Trigger every time an api key is used |
-| [views?](https://sheetbase.github.io/server/interfaces/options.html#views)     | <code>string</code>                                                                                           | The view template folder              |
+| [failure?](https://sheetbase.github.io/server/interfaces/options.html#failure) | <code>undefined \| function</code>                                                                            | Handler for invalid api key           |
+| [key?](https://sheetbase.github.io/server/interfaces/options.html#key)         | <code>undefined \| string</code>                                                                              | Single api key                        |
+| [trigger?](https://sheetbase.github.io/server/interfaces/options.html#trigger) | <code>undefined \| function</code>                                                                            | Trigger every time an api key is used |
+| [views?](https://sheetbase.github.io/server/interfaces/options.html#views)     | <code>undefined \| string</code>                                                                              | The view template folder              |
 
 </section>
 
-<section id="main" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+<section id="lib" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
 
-<h2><a name="main" href="https://sheetbase.github.io/server/classes/main.html"><p>Main</p>
+<h2><a name="lib" href="https://sheetbase.github.io/server/classes/lib.html"><p>Lib</p>
 </a></h2>
 
-**The `Main` class.**
+**The `Lib` class.**
 
-<h3><a name="main-properties"><p>Main properties</p>
+<h3><a name="lib-properties"><p>Lib properties</p>
 </a></h3>
 
-| Name                                                                                        | Type                                                                                                                           | Description |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| [apiKeyService](https://sheetbase.github.io/server/classes/main.html#apikeyservice)         | <code><a href="https://sheetbase.github.io/server/classes/apikeyservice.html" target="_blank">APIKeyService</a></code>         |             |
-| [httpService](https://sheetbase.github.io/server/classes/main.html#httpservice)             | <code><a href="https://sheetbase.github.io/server/classes/httpservice.html" target="_blank">HttpService</a></code>             |             |
-| [middlewareService](https://sheetbase.github.io/server/classes/main.html#middlewareservice) | <code><a href="https://sheetbase.github.io/server/classes/middlewareservice.html" target="_blank">MiddlewareService</a></code> |             |
-| [monitoringService](https://sheetbase.github.io/server/classes/main.html#monitoringservice) | <code><a href="https://sheetbase.github.io/server/classes/monitoringservice.html" target="_blank">MonitoringService</a></code> |             |
-| [responseService](https://sheetbase.github.io/server/classes/main.html#responseservice)     | <code><a href="https://sheetbase.github.io/server/classes/responseservice.html" target="_blank">ResponseService</a></code>     |             |
-| [routeService](https://sheetbase.github.io/server/classes/main.html#routeservice)           | <code><a href="https://sheetbase.github.io/server/classes/routeservice.html" target="_blank">RouteService</a></code>           |             |
-| [routerService](https://sheetbase.github.io/server/classes/main.html#routerservice)         | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>         |             |
-| [serverService](https://sheetbase.github.io/server/classes/main.html#serverservice)         | <code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code>         |             |
+| Name                                                                                       | Type                                                                                                                           | Description |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| [apiKeyService](https://sheetbase.github.io/server/classes/lib.html#apikeyservice)         | <code><a href="https://sheetbase.github.io/server/classes/apikeyservice.html" target="_blank">APIKeyService</a></code>         |             |
+| [group1Route](https://sheetbase.github.io/server/classes/lib.html#group1route)             | <code><a href="https://sheetbase.github.io/server/classes/group1route.html" target="_blank">Group1Route</a></code>             |             |
+| [group2Route](https://sheetbase.github.io/server/classes/lib.html#group2route)             | <code><a href="https://sheetbase.github.io/server/classes/group2route.html" target="_blank">Group2Route</a></code>             |             |
+| [httpService](https://sheetbase.github.io/server/classes/lib.html#httpservice)             | <code><a href="https://sheetbase.github.io/server/classes/httpservice.html" target="_blank">HttpService</a></code>             |             |
+| [loggingRoute](https://sheetbase.github.io/server/classes/lib.html#loggingroute)           | <code><a href="https://sheetbase.github.io/server/classes/loggingroute.html" target="_blank">LoggingRoute</a></code>           |             |
+| [middlewareService](https://sheetbase.github.io/server/classes/lib.html#middlewareservice) | <code><a href="https://sheetbase.github.io/server/classes/middlewareservice.html" target="_blank">MiddlewareService</a></code> |             |
+| [monitoringService](https://sheetbase.github.io/server/classes/lib.html#monitoringservice) | <code><a href="https://sheetbase.github.io/server/classes/monitoringservice.html" target="_blank">MonitoringService</a></code> |             |
+| [responseService](https://sheetbase.github.io/server/classes/lib.html#responseservice)     | <code><a href="https://sheetbase.github.io/server/classes/responseservice.html" target="_blank">ResponseService</a></code>     |             |
+| [routerService](https://sheetbase.github.io/server/classes/lib.html#routerservice)         | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>         |             |
+| [serverService](https://sheetbase.github.io/server/classes/lib.html#serverservice)         | <code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code>         |             |
+| [systemRoute](https://sheetbase.github.io/server/classes/lib.html#systemroute)             | <code><a href="https://sheetbase.github.io/server/classes/systemroute.html" target="_blank">SystemRoute</a></code>             |             |
 
-<h3><a name="main-methods"><p>Main methods</p>
+<h3><a name="lib-methods"><p>Lib methods</p>
 </a></h3>
 
-| Function                                   | Returns type                                                                                                           | Description              |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| [registerRoutes()](#main-registerroutes-0) | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code> | Expose the module routes |
+| Function                                                | Returns type                                                                                                           | Description              |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| [registerRoutes(routeEnabling?)](#lib-registerroutes-0) | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code> | Expose the module routes |
 
-<h4><a name="main-registerroutes-0" href="https://sheetbase.github.io/server/classes/main.html#registerroutes"><p><code>registerRoutes()</code></p>
+<h4><a name="lib-registerroutes-0" href="https://sheetbase.github.io/server/classes/lib.html#registerroutes"><p><code>registerRoutes(routeEnabling?)</code></p>
 </a></h4>
 
 **Expose the module routes**
+
+**Parameters**
+
+| Param         | Type                                                                                                                                | Description |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| routeEnabling | <code>true \| <a href="https://sheetbase.github.io/server/interfaces/disabledroutes.html" target="_blank">DisabledRoutes</a></code> |             |
 
 **Returns**
 
@@ -109,18 +126,20 @@ const getOptions = ServerModule.getOptions();
 <h2><a name="routing"><p>Routing</p>
 </a></h2>
 
-**ServerModule** module provides REST API endpoints allowing clients to access server resources. Theses enpoints are not public by default, to expose the endpoints:
+**ServerModule** provides REST API endpoints allowing clients to access server resources. Theses enpoints are not exposed by default, to expose the endpoints:
 
 ```ts
-ServerModule.registerRoutes(/* routing options */);
+ServerModule.registerRoutes(routeEnabling?);
 ```
 
-See detail addon routes options at [AddonRoutesOptions](https://sheetbase.github.io/server/interfaces/addonroutesoptions.html).
-
-<h3><a name="routing-endpoint"><p>Endpoint</p>
+<h3><a name="routing-errors"><p>Errors</p>
 </a></h3>
 
-The default endpoint: **``**. The endpoint can be changed by passing `endpoint` property when [`registerRoutes`](#routing).
+**ServerModule** returns these routing errors, you may use the error code to customize the message:
+
+- `e0/e1`: Error 1
+- `e2/e1`: Error 1
+- `logging/e1`: Error 1
 
 <h3><a name="routing-routes"><p>Routes</p>
 </a></h3>
@@ -128,18 +147,32 @@ The default endpoint: **``**. The endpoint can be changed by passing `endpoint` 
 <h4><a name="routing-routes-overview"><p>Routes overview</p>
 </a></h4>
 
-| Route                     | Method | Description               |
-| ------------------------- | ------ | ------------------------- |
-| [/system](#GET__system)   | `GET`  | Get the system infomation |
-| [/logging](#PUT__logging) | `PUT`  | Set a server log          |
+| Route                          | Method | Disabled | Description               |
+| ------------------------------ | ------ | -------- | ------------------------- |
+| [/e0](#GET__e0)                | `GET`  | `true`   | Endpoint 0                |
+| [/group2/e1](#GET__group2_e1)  | `GET`  | `true`   | Endpoint 1                |
+| [/group2/e2](#POST__group2_e2) | `POST` | `true`   | Endpoint 2                |
+| [/logging](#PUT__logging)      | `PUT`  | `true`   | Set a server log          |
+| [/system](#GET__system)        | `GET`  |          | Get the system infomation |
 
 <h4><a name="routing-routes-detail"><p>Routes detail</p>
 </a></h4>
 
-<h5><a name="GET__system"><p><code>GET</code> /system</p>
+<h5><a name="GET__e0"><p><code>GET</code> /e0</p>
 </a></h5>
 
-Get the system infomation
+`DISABLED` Endpoint 0
+
+**Response**
+
+`number`
+
+---
+
+<h5><a name="GET__group2_e1"><p><code>GET</code> /group2/e1</p>
+</a></h5>
+
+`DISABLED` Endpoint 1
 
 **Response**
 
@@ -147,10 +180,28 @@ Get the system infomation
 
 ---
 
+<h5><a name="POST__group2_e2"><p><code>POST</code> /group2/e2</p>
+</a></h5>
+
+`DISABLED` Endpoint 2
+
+**Request body**
+
+| Name       | Type        | Description |
+| ---------- | ----------- | ----------- |
+| **param1** | <a data-sref="string"><code>string</code></a>  | The param 1 |
+| param2?    | <a data-sref="boolean"><code>boolean</code></a> |             |
+
+**Response**
+
+`boolean`
+
+---
+
 <h5><a name="PUT__logging"><p><code>PUT</code> /logging</p>
 </a></h5>
 
-Set a server log
+`DISABLED` Set a server log
 
 **Request body**
 
@@ -162,6 +213,17 @@ Set a server log
 **Response**
 
 `void`
+
+---
+
+<h5><a name="GET__system"><p><code>GET</code> /system</p>
+</a></h5>
+
+Get the system infomation
+
+**Response**
+
+`object`
 
 ---
 

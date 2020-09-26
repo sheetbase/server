@@ -38,6 +38,7 @@
   "dependencies": {},
   "devDependencies": {
     "@lamnhan/testea": "1.0.0-beta3",
+    "@sheetbase/app-scripts": "file:../../app-scripts/sheetbase-app-scripts-3.0.0-beta2.tgz",
     "@types/chai": "^4.2.12",
     "@types/google-apps-script": "^1.0.16",
     "@types/mocha": "^8.0.3",

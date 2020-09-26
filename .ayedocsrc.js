@@ -1,9 +1,7 @@
-// const sheetbaseTemplate = require('@sheetbase/app-scripts/ayedocs-plugin/sheetbase.template');
-const sheetbaseRoutingTemplate = require('../../app-scripts/ayedocs-plugin/sheetbase-routing.template');
+const sheetbaseTemplate = require('@sheetbase/app-scripts/ayedocs-plugins/sheetbase.template');
 
 module.exports = {
   fileRender: {
-    // 'README.md': sheetbaseTemplate(true)
-    'TEST.md': sheetbaseRoutingTemplate()
+    'README.md': sheetbaseTemplate(true)
   }
 };
