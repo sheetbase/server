@@ -19,9 +19,6 @@
   - [Routes](#routing-routes)
     - [Routes overview](#routing-routes-overview)
     - [Routes detail](#routing-routes-detail)
-      - [`GET` /e0](#GET__e0)
-      - [`GET` /group2/e1](#GET__group2_e1)
-      - [`POST` /group2/e2](#POST__group2_e2)
       - [`PUT` /logging](#PUT__logging)
       - [`GET` /system](#GET__system)
 - [Detail API reference](https://sheetbase.github.io/server)
@@ -84,8 +81,6 @@ export class App {
 | Name                                                                                       | Type                                                                                                                           | Description |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | [apiKeyService](https://sheetbase.github.io/server/classes/lib.html#apikeyservice)         | <code><a href="https://sheetbase.github.io/server/classes/apikeyservice.html" target="_blank">APIKeyService</a></code>         |             |
-| [group1Route](https://sheetbase.github.io/server/classes/lib.html#group1route)             | <code><a href="https://sheetbase.github.io/server/classes/group1route.html" target="_blank">Group1Route</a></code>             |             |
-| [group2Route](https://sheetbase.github.io/server/classes/lib.html#group2route)             | <code><a href="https://sheetbase.github.io/server/classes/group2route.html" target="_blank">Group2Route</a></code>             |             |
 | [httpService](https://sheetbase.github.io/server/classes/lib.html#httpservice)             | <code><a href="https://sheetbase.github.io/server/classes/httpservice.html" target="_blank">HttpService</a></code>             |             |
 | [loggingRoute](https://sheetbase.github.io/server/classes/lib.html#loggingroute)           | <code><a href="https://sheetbase.github.io/server/classes/loggingroute.html" target="_blank">LoggingRoute</a></code>           |             |
 | [middlewareService](https://sheetbase.github.io/server/classes/lib.html#middlewareservice) | <code><a href="https://sheetbase.github.io/server/classes/middlewareservice.html" target="_blank">MiddlewareService</a></code> |             |
@@ -137,8 +132,6 @@ ServerModule.registerRoutes(routeEnabling?);
 
 **ServerModule** returns these routing errors, you may use the error code to customize the message:
 
-- `e0/e1`: Error 1
-- `e2/e1`: Error 1
 - `logging/e1`: Error 1
 
 <h3><a name="routing-routes"><p>Routes</p>
@@ -147,56 +140,13 @@ ServerModule.registerRoutes(routeEnabling?);
 <h4><a name="routing-routes-overview"><p>Routes overview</p>
 </a></h4>
 
-| Route                          | Method | Disabled | Description               |
-| ------------------------------ | ------ | -------- | ------------------------- |
-| [/e0](#GET__e0)                | `GET`  | `true`   | Endpoint 0                |
-| [/group2/e1](#GET__group2_e1)  | `GET`  | `true`   | Endpoint 1                |
-| [/group2/e2](#POST__group2_e2) | `POST` | `true`   | Endpoint 2                |
-| [/logging](#PUT__logging)      | `PUT`  | `true`   | Set a server log          |
-| [/system](#GET__system)        | `GET`  |          | Get the system infomation |
+| Route                     | Method | Disabled | Description               |
+| ------------------------- | ------ | -------- | ------------------------- |
+| [/logging](#PUT__logging) | `PUT`  | `true`   | Set a server log          |
+| [/system](#GET__system)   | `GET`  |          | Get the system infomation |
 
 <h4><a name="routing-routes-detail"><p>Routes detail</p>
 </a></h4>
-
-<h5><a name="GET__e0"><p><code>GET</code> /e0</p>
-</a></h5>
-
-`DISABLED` Endpoint 0
-
-**Response**
-
-`number`
-
----
-
-<h5><a name="GET__group2_e1"><p><code>GET</code> /group2/e1</p>
-</a></h5>
-
-`DISABLED` Endpoint 1
-
-**Response**
-
-`object`
-
----
-
-<h5><a name="POST__group2_e2"><p><code>POST</code> /group2/e2</p>
-</a></h5>
-
-`DISABLED` Endpoint 2
-
-**Request body**
-
-| Name       | Type        | Description |
-| ---------- | ----------- | ----------- |
-| **param1** | <a data-sref="string"><code>string</code></a>  | The param 1 |
-| param2?    | <a data-sref="boolean"><code>boolean</code></a> |             |
-
-**Response**
-
-`boolean`
-
----
 
 <h5><a name="PUT__logging"><p><code>PUT</code> /logging</p>
 </a></h5>

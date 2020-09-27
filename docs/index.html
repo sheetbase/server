@@ -62,6 +62,348 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
+				<section id="head" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<a href="#sheetbaseserver" id="sheetbaseserver" style="color: inherit; text-decoration: none;">
+						<h1>@sheetbase/server</h1>
+					</a>
+					<p><strong>Build server app on Google Apps Script.</strong></p>
+				</section>
+				<section id="tocx" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<ul>
+						<li><a href="#installation">Installation</a></li>
+						<li><a href="#options">Options</a></li>
+						<li><a href="#lib">Lib</a><ul>
+								<li><a href="#lib-properties">Lib properties</a></li>
+								<li><a href="#lib-methods">Lib methods</a><ul>
+										<li><a href="#lib-registerroutes-0"><code>registerRoutes(routeEnabling?)</code></a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li><a href="#routing">Routing</a><ul>
+								<li><a href="#routing-errors">Errors</a></li>
+								<li><a href="#routing-routes">Routes</a><ul>
+										<li><a href="#routing-routes-overview">Routes overview</a></li>
+										<li><a href="#routing-routes-detail">Routes detail</a><ul>
+												<li><a href="#GET__e0"><code>GET</code> /e0</a></li>
+												<li><a href="#GET__group2_e1"><code>GET</code> /group2/e1</a></li>
+												<li><a href="#POST__group2_e2"><code>POST</code> /group2/e2</a></li>
+												<li><a href="#PUT__logging"><code>PUT</code> /logging</a></li>
+												<li><a href="#GET__system"><code>GET</code> /system</a></li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li><a href="https://sheetbase.github.io/server">Detail API reference</a></li>
+					</ul>
+				</section>
+				<section id="installation" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<h2><a name="installation"><p>Installation</p>
+					</a></h2>
+					<ul>
+						<li><p>Install: <code>npm install --save @sheetbase/server</code></p>
+						</li>
+						<li><p>Usage:</p>
+						</li>
+					</ul>
+					<pre><code class="language-ts"><span class="hljs-comment">// 1. import module</span>
+<span class="hljs-keyword">import</span> { ServerModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@sheetbase/server&quot;</span>;
+
+<span class="hljs-comment">// 2. create an instance</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> App {
+  <span class="hljs-comment">// the object</span>
+  serverModule: ServerModule;
+
+  <span class="hljs-comment">// initiate the instance</span>
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-built_in">this</span>.serverModule = <span class="hljs-keyword">new</span> ServerModule(<span class="hljs-comment">/* options */</span>);
+  }
+}</code></pre>
+				</section>
+				<section id="options" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<h2><a name="options"><p>Options</p>
+					</a></h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#apikeys">apiKeys?</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/interfaces/apikeys.html" target="_blank">ApiKeys</a></code></td>
+								<td>Multiple api keys</td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#failure">failure?</a></td>
+								<td><code>undefined | function</code></td>
+								<td>Handler for invalid api key</td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#key">key?</a></td>
+								<td><code>undefined | string</code></td>
+								<td>Single api key</td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#trigger">trigger?</a></td>
+								<td><code>undefined | function</code></td>
+								<td>Trigger every time an api key is used</td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#views">views?</a></td>
+								<td><code>undefined | string</code></td>
+								<td>The view template folder</td>
+							</tr>
+					</tbody></table>
+				</section>
+				<section id="lib" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<h2><a name="lib" href="https://sheetbase.github.io/server/classes/lib.html"><p>Lib</p>
+					</a></h2>
+					<p><strong>The <code>Lib</code> class.</strong></p>
+					<h3><a name="lib-properties"><p>Lib properties</p>
+					</a></h3>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#apikeyservice">apiKeyService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/apikeyservice.html" target="_blank">APIKeyService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#group1route">group1Route</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/group1route.html" target="_blank">Group1Route</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#group2route">group2Route</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/group2route.html" target="_blank">Group2Route</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#httpservice">httpService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/httpservice.html" target="_blank">HttpService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#loggingroute">loggingRoute</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/loggingroute.html" target="_blank">LoggingRoute</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#middlewareservice">middlewareService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/middlewareservice.html" target="_blank">MiddlewareService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#monitoringservice">monitoringService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/monitoringservice.html" target="_blank">MonitoringService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#responseservice">responseService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/responseservice.html" target="_blank">ResponseService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#routerservice">routerService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#serverservice">serverService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#systemroute">systemRoute</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/systemroute.html" target="_blank">SystemRoute</a></code></td>
+								<td></td>
+							</tr>
+					</tbody></table>
+					<h3><a name="lib-methods"><p>Lib methods</p>
+					</a></h3>
+					<table>
+						<thead>
+							<tr>
+								<th>Function</th>
+								<th>Returns type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td><a href="#lib-registerroutes-0">registerRoutes(routeEnabling?)</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code></td>
+								<td>Expose the module routes</td>
+							</tr>
+					</tbody></table>
+					<h4><a name="lib-registerroutes-0" href="https://sheetbase.github.io/server/classes/lib.html#registerroutes"><p><code>registerRoutes(routeEnabling?)</code></p>
+					</a></h4>
+					<p><strong>Expose the module routes</strong></p>
+					<p><strong>Parameters</strong></p>
+					<table>
+						<thead>
+							<tr>
+								<th>Param</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td>routeEnabling</td>
+								<td><code>true | <a href="https://sheetbase.github.io/server/interfaces/disabledroutes.html" target="_blank">DisabledRoutes</a></code></td>
+								<td></td>
+							</tr>
+					</tbody></table>
+					<p><strong>Returns</strong></p>
+					<p><code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code></p>
+					<hr>
+				</section>
+				<section id="routing" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<h2><a name="routing"><p>Routing</p>
+					</a></h2>
+					<p><strong>ServerModule</strong> provides REST API endpoints allowing clients to access server resources. Theses enpoints are not exposed by default, to expose the endpoints:</p>
+					<pre><code class="language-ts">ServerModule.registerRoutes(routeEnabling?);</code></pre>
+					<h3><a name="routing-errors"><p>Errors</p>
+					</a></h3>
+					<p><strong>ServerModule</strong> returns these routing errors, you may use the error code to customize the message:</p>
+					<ul>
+						<li><code>e0/e1</code>: Error 1</li>
+						<li><code>e2/e1</code>: Error 1</li>
+						<li><code>logging/e1</code>: Error 1</li>
+					</ul>
+					<h3><a name="routing-routes"><p>Routes</p>
+					</a></h3>
+					<h4><a name="routing-routes-overview"><p>Routes overview</p>
+					</a></h4>
+					<table>
+						<thead>
+							<tr>
+								<th>Route</th>
+								<th>Method</th>
+								<th>Disabled</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td><a href="#GET__e0">/e0</a></td>
+								<td><code>GET</code></td>
+								<td><code>true</code></td>
+								<td>Endpoint 0</td>
+							</tr>
+							<tr>
+								<td><a href="#GET__group2_e1">/group2/e1</a></td>
+								<td><code>GET</code></td>
+								<td><code>true</code></td>
+								<td>Endpoint 1</td>
+							</tr>
+							<tr>
+								<td><a href="#POST__group2_e2">/group2/e2</a></td>
+								<td><code>POST</code></td>
+								<td><code>true</code></td>
+								<td>Endpoint 2</td>
+							</tr>
+							<tr>
+								<td><a href="#PUT__logging">/logging</a></td>
+								<td><code>PUT</code></td>
+								<td><code>true</code></td>
+								<td>Set a server log</td>
+							</tr>
+							<tr>
+								<td><a href="#GET__system">/system</a></td>
+								<td><code>GET</code></td>
+								<td></td>
+								<td>Get the system infomation</td>
+							</tr>
+					</tbody></table>
+					<h4><a name="routing-routes-detail"><p>Routes detail</p>
+					</a></h4>
+					<h5><a name="GET__e0"><p><code>GET</code> /e0</p>
+					</a></h5>
+					<p><code>DISABLED</code> Endpoint 0</p>
+					<p><strong>Response</strong></p>
+					<p><code>number</code></p>
+					<hr>
+					<h5><a name="GET__group2_e1"><p><code>GET</code> /group2/e1</p>
+					</a></h5>
+					<p><code>DISABLED</code> Endpoint 1</p>
+					<p><strong>Response</strong></p>
+					<p><code>object</code></p>
+					<hr>
+					<h5><a name="POST__group2_e2"><p><code>POST</code> /group2/e2</p>
+					</a></h5>
+					<p><code>DISABLED</code> Endpoint 2</p>
+					<p><strong>Request body</strong></p>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td><strong>param1</strong></td>
+								<td><a data-sref="string"><code>string</code></a></td>
+								<td>The param 1</td>
+							</tr>
+							<tr>
+								<td>param2?</td>
+								<td><a data-sref="boolean"><code>boolean</code></a></td>
+								<td></td>
+							</tr>
+					</tbody></table>
+					<p><strong>Response</strong></p>
+					<p><code>boolean</code></p>
+					<hr>
+					<h5><a name="PUT__logging"><p><code>PUT</code> /logging</p>
+					</a></h5>
+					<p><code>DISABLED</code> Set a server log</p>
+					<p><strong>Request body</strong></p>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody><tr>
+								<td><strong>level</strong></td>
+								<td><a data-sref="LoggingLevel" href="https://sheetbase.github.io/server/globals.html#logginglevel"><code>LoggingLevel</code></a></td>
+								<td>The logging level</td>
+							</tr>
+							<tr>
+								<td><strong>value</strong></td>
+								<td><a data-sref="LoggingValue" href="https://sheetbase.github.io/server/globals.html#loggingvalue"><code>LoggingValue</code></a></td>
+								<td>The logging value</td>
+							</tr>
+					</tbody></table>
+					<p><strong>Response</strong></p>
+					<p><code>void</code></p>
+					<hr>
+					<h5><a name="GET__system"><p><code>GET</code> /system</p>
+					</a></h5>
+					<p>Get the system infomation</p>
+					<p><strong>Response</strong></p>
+					<p><code>object</code></p>
+					<hr>
+				</section>
+				<section id="license" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
+					<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+						<h2>License</h2>
+					</a>
+					<p><strong>@sheetbase/server</strong> is released under the <a href="https://github.com/sheetbase/server/blob/master/LICENSE">MIT</a> license.</p>
+				</section>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -76,12 +418,6 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
 						<a href="classes/apikeyservice.html" class="tsd-kind-icon">APIKey<wbr>Service</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/group1route.html" class="tsd-kind-icon">Group1<wbr>Route</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/group2route.html" class="tsd-kind-icon">Group2<wbr>Route</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/httpservice.html" class="tsd-kind-icon">Http<wbr>Service</a>
