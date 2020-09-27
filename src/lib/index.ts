@@ -10,8 +10,6 @@ import {MiddlewareService} from './services/middleware.service';
 
 import {SystemRoute} from './routes/system.route';
 import {LoggingRoute} from './routes/logging.route';
-import {Group1Route} from './routes/group1.route';
-import {Group2Route} from './routes/group2.route';
 
 export class Lib {
   serverService: ServerService;
@@ -24,8 +22,6 @@ export class Lib {
 
   systemRoute: SystemRoute;
   loggingRoute: LoggingRoute;
-  group1Route: Group1Route;
-  group2Route: Group2Route;
 
   constructor(options?: Options) {
     // services
@@ -45,8 +41,6 @@ export class Lib {
     // routes
     this.systemRoute = new SystemRoute();
     this.loggingRoute = new LoggingRoute(this.monitoringService);
-    this.group1Route = new Group1Route();
-    this.group2Route = new Group2Route();
   }
 
   /**
@@ -54,7 +48,7 @@ export class Lib {
    */
   registerRoutes(routeEnabling?: true | DisabledRoutes) {
     return this.routerService.register(
-      [this.systemRoute, this.loggingRoute, this.group1Route, this.group2Route],
+      [this.systemRoute, this.loggingRoute],
       routeEnabling
     );
   }
