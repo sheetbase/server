@@ -81,13 +81,9 @@
 							</ul>
 						</li>
 						<li><a href="#routing">Routing</a><ul>
-								<li><a href="#routing-errors">Errors</a></li>
 								<li><a href="#routing-routes">Routes</a><ul>
 										<li><a href="#routing-routes-overview">Routes overview</a></li>
 										<li><a href="#routing-routes-detail">Routes detail</a><ul>
-												<li><a href="#GET__e0"><code>GET</code> /e0</a></li>
-												<li><a href="#GET__group2_e1"><code>GET</code> /group2/e1</a></li>
-												<li><a href="#POST__group2_e2"><code>POST</code> /group2/e2</a></li>
 												<li><a href="#PUT__logging"><code>PUT</code> /logging</a></li>
 												<li><a href="#GET__system"><code>GET</code> /system</a></li>
 											</ul>
@@ -180,16 +176,6 @@
 								<td></td>
 							</tr>
 							<tr>
-								<td><a href="https://sheetbase.github.io/server/classes/lib.html#group1route">group1Route</a></td>
-								<td><code><a href="https://sheetbase.github.io/server/classes/group1route.html" target="_blank">Group1Route</a></code></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td><a href="https://sheetbase.github.io/server/classes/lib.html#group2route">group2Route</a></td>
-								<td><code><a href="https://sheetbase.github.io/server/classes/group2route.html" target="_blank">Group2Route</a></code></td>
-								<td></td>
-							</tr>
-							<tr>
 								<td><a href="https://sheetbase.github.io/server/classes/lib.html#httpservice">httpService</a></td>
 								<td><code><a href="https://sheetbase.github.io/server/classes/httpservice.html" target="_blank">HttpService</a></code></td>
 								<td></td>
@@ -273,14 +259,6 @@
 					</a></h2>
 					<p><strong>ServerModule</strong> provides REST API endpoints allowing clients to access server resources. Theses enpoints are not exposed by default, to expose the endpoints:</p>
 					<pre><code class="language-ts">ServerModule.registerRoutes(routeEnabling?);</code></pre>
-					<h3><a name="routing-errors"><p>Errors</p>
-					</a></h3>
-					<p><strong>ServerModule</strong> returns these routing errors, you may use the error code to customize the message:</p>
-					<ul>
-						<li><code>e0/e1</code>: Error 1</li>
-						<li><code>e2/e1</code>: Error 1</li>
-						<li><code>logging/e1</code>: Error 1</li>
-					</ul>
 					<h3><a name="routing-routes"><p>Routes</p>
 					</a></h3>
 					<h4><a name="routing-routes-overview"><p>Routes overview</p>
@@ -295,24 +273,6 @@
 							</tr>
 						</thead>
 						<tbody><tr>
-								<td><a href="#GET__e0">/e0</a></td>
-								<td><code>GET</code></td>
-								<td><code>true</code></td>
-								<td>Endpoint 0</td>
-							</tr>
-							<tr>
-								<td><a href="#GET__group2_e1">/group2/e1</a></td>
-								<td><code>GET</code></td>
-								<td><code>true</code></td>
-								<td>Endpoint 1</td>
-							</tr>
-							<tr>
-								<td><a href="#POST__group2_e2">/group2/e2</a></td>
-								<td><code>POST</code></td>
-								<td><code>true</code></td>
-								<td>Endpoint 2</td>
-							</tr>
-							<tr>
 								<td><a href="#PUT__logging">/logging</a></td>
 								<td><code>PUT</code></td>
 								<td><code>true</code></td>
@@ -327,44 +287,6 @@
 					</tbody></table>
 					<h4><a name="routing-routes-detail"><p>Routes detail</p>
 					</a></h4>
-					<h5><a name="GET__e0"><p><code>GET</code> /e0</p>
-					</a></h5>
-					<p><code>DISABLED</code> Endpoint 0</p>
-					<p><strong>Response</strong></p>
-					<p><code>number</code></p>
-					<hr>
-					<h5><a name="GET__group2_e1"><p><code>GET</code> /group2/e1</p>
-					</a></h5>
-					<p><code>DISABLED</code> Endpoint 1</p>
-					<p><strong>Response</strong></p>
-					<p><code>object</code></p>
-					<hr>
-					<h5><a name="POST__group2_e2"><p><code>POST</code> /group2/e2</p>
-					</a></h5>
-					<p><code>DISABLED</code> Endpoint 2</p>
-					<p><strong>Request body</strong></p>
-					<table>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Type</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody><tr>
-								<td><strong>param1</strong></td>
-								<td><a data-sref="string"><code>string</code></a></td>
-								<td>The param 1</td>
-							</tr>
-							<tr>
-								<td>param2?</td>
-								<td><a data-sref="boolean"><code>boolean</code></a></td>
-								<td></td>
-							</tr>
-					</tbody></table>
-					<p><strong>Response</strong></p>
-					<p><code>boolean</code></p>
-					<hr>
 					<h5><a name="PUT__logging"><p><code>PUT</code> /logging</p>
 					</a></h5>
 					<p><code>DISABLED</code> Set a server log</p>

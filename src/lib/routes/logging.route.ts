@@ -6,10 +6,6 @@ export class LoggingRoute {
 
   disabled = ['put'];
 
-  errors = {
-    'logging/e1': 'Error 1',
-  };
-
   constructor(private monitoringService: MonitoringService) {}
 
   /**

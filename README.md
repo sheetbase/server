@@ -15,7 +15,6 @@
   - [Lib methods](#lib-methods)
     - [`registerRoutes(routeEnabling?)`](#lib-registerroutes-0)
 - [Routing](#routing)
-  - [Errors](#routing-errors)
   - [Routes](#routing-routes)
     - [Routes overview](#routing-routes-overview)
     - [Routes detail](#routing-routes-detail)
@@ -126,13 +125,6 @@ export class App {
 ```ts
 ServerModule.registerRoutes(routeEnabling?);
 ```
-
-<h3><a name="routing-errors"><p>Errors</p>
-</a></h3>
-
-**ServerModule** returns these routing errors, you may use the error code to customize the message:
-
-- `logging/e1`: Error 1
 
 <h3><a name="routing-routes"><p>Routes</p>
 </a></h3>

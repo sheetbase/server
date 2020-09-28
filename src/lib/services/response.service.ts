@@ -113,7 +113,6 @@ export class ResponseService {
   render(
     templating: string | GoogleAppsScript.HTML.HtmlTemplate,
     data: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [key: string]: any;
     } = {},
     viewEngine?: ViewEngine
