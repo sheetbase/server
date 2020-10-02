@@ -1,5 +1,6 @@
-import {Options, DisabledRoutes} from './types';
+import {Options, DisabledRoutes} from './types/server.type';
 
+import {OptionService} from './services/option.service';
 import {ServerService} from './services/server.service';
 import {ResponseService} from './services/response.service';
 import {RouterService} from './services/router.service';
@@ -12,6 +13,7 @@ import {SystemRoute} from './routes/system.route';
 import {LoggingRoute} from './routes/logging.route';
 
 export class Lib {
+  optionService: OptionService;
   serverService: ServerService;
   responseService: ResponseService;
   routerService: RouterService;
@@ -19,23 +21,26 @@ export class Lib {
   monitoringService: MonitoringService;
   apiKeyService: APIKeyService;
   middlewareService: MiddlewareService;
-
   systemRoute: SystemRoute;
   loggingRoute: LoggingRoute;
 
-  constructor(options?: Options) {
+  constructor(options: Options = {}) {
     // services
-    this.serverService = new ServerService(options);
-    this.responseService = new ResponseService(this.serverService);
+    this.optionService = new OptionService(options);
+    this.serverService = new ServerService();
+    this.responseService = new ResponseService(
+      this.optionService,
+      this.serverService
+    );
     this.routerService = new RouterService(this.serverService);
     this.httpService = new HttpService(
       this.serverService,
       this.responseService
     );
     this.monitoringService = new MonitoringService();
-    this.apiKeyService = new APIKeyService(this.serverService);
+    this.apiKeyService = new APIKeyService(this.optionService);
     this.middlewareService = new MiddlewareService(
-      this.serverService,
+      this.optionService,
       this.apiKeyService
     );
     // routes

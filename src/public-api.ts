@@ -1,6 +1,6 @@
 export {Lib as ServerModule} from './lib/index';
 
-export * from './lib/types';
+export * from './lib/types/server.type';
 
 export * from './lib/services/api-key.service';
 export * from './lib/services/http.service';

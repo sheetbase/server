@@ -6,7 +6,7 @@ import {
   RouteGroup,
   DisabledRoutes,
   DisabledRouteValue,
-} from '../types';
+} from '../types/server.type';
 import {ServerService} from './server.service';
 
 export class RouterService {
@@ -55,15 +55,12 @@ export class RouterService {
     return routerInstance;
   }
 
-  register(
-    items: Array<RouteGroup | RouteSet>,
-    routeEnabling?: true | DisabledRoutes
-  ) {
+  register(items: unknown[], routeEnabling?: true | DisabledRoutes) {
     let moduleDisabledRoutes: DisabledRoutes = {};
     // register values
     for (let i = 0; i < items.length; i++) {
       // a group
-      if (!items[i].endpoint) {
+      if (!(items[i] as Record<string, unknown>).endpoint) {
         const routeGroup = items[i] as RouteGroup;
         const {baseEndpoint, disabledRoutes} = routeGroup;
         // record disabled routes

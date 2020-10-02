@@ -1,10 +1,10 @@
-import {ServerService} from './server.service';
+import {OptionService} from './option.service';
 
 export class APIKeyService {
-  constructor(private serverService: ServerService) {}
+  constructor(private optionService: OptionService) {}
 
   getApiKeys() {
-    const {apiKeys = {}, key} = this.serverService.getOptions();
+    const {apiKeys = {}, key} = this.optionService.getOptions();
     if (key) {
       apiKeys[key] = {title: 'Default'};
     }

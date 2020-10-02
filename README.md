@@ -84,6 +84,7 @@ export class App {
 | [loggingRoute](https://sheetbase.github.io/server/classes/lib.html#loggingroute)           | <code><a href="https://sheetbase.github.io/server/classes/loggingroute.html" target="_blank">LoggingRoute</a></code>           |             |
 | [middlewareService](https://sheetbase.github.io/server/classes/lib.html#middlewareservice) | <code><a href="https://sheetbase.github.io/server/classes/middlewareservice.html" target="_blank">MiddlewareService</a></code> |             |
 | [monitoringService](https://sheetbase.github.io/server/classes/lib.html#monitoringservice) | <code><a href="https://sheetbase.github.io/server/classes/monitoringservice.html" target="_blank">MonitoringService</a></code> |             |
+| [optionService](https://sheetbase.github.io/server/classes/lib.html#optionservice)         | <code><a href="https://sheetbase.github.io/server/classes/optionservice.html" target="_blank">OptionService</a></code>         |             |
 | [responseService](https://sheetbase.github.io/server/classes/lib.html#responseservice)     | <code><a href="https://sheetbase.github.io/server/classes/responseservice.html" target="_blank">ResponseService</a></code>     |             |
 | [routerService](https://sheetbase.github.io/server/classes/lib.html#routerservice)         | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>         |             |
 | [serverService](https://sheetbase.github.io/server/classes/lib.html#serverservice)         | <code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code>         |             |
@@ -147,10 +148,10 @@ ServerModule.registerRoutes(routeEnabling?);
 
 **Request body**
 
-| Name      | Type             | Description       |
-| --------- | ---------------- | ----------------- |
-| **level** | <a data-sref="LoggingLevel" href="https://sheetbase.github.io/server/globals.html#logginglevel"><code>LoggingLevel</code></a> | The logging level |
-| **value** | <a data-sref="LoggingValue" href="https://sheetbase.github.io/server/globals.html#loggingvalue"><code>LoggingValue</code></a> | The logging value |
+| Name      | Type             | Description |
+| --------- | ---------------- | ----------- |
+| **level** | <a data-sref="LoggingLevel" href="https://sheetbase.github.io/server/globals.html#logginglevel"><code>LoggingLevel</code></a> |             |
+| **value** | <a data-sref="LoggingValue" href="https://sheetbase.github.io/server/globals.html#loggingvalue"><code>LoggingValue</code></a> |             |
 
 **Response**
 

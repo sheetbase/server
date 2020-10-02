@@ -6,7 +6,8 @@ import {
   RouteNext,
   RoutingMethod,
   RoutingHandler,
-} from '../types';
+  RoutingResult,
+} from '../types/server.type';
 import {ServerService} from './server.service';
 import {ResponseService} from './response.service';
 
@@ -66,11 +67,11 @@ export class HttpService {
     try {
       const result = this.execute(handlers, req, res);
       if (!result) {
-        return res.done(); // direct returns, empty result
+        return res.done(); // direct (void)
       } else if (typeof result === 'string') {
-        return res.html(result); // direct returns, a string
-      } else if (!result.getContent) {
-        return res.success(result); // direct returns, json data
+        return res.html(result); // direct (string)
+      } else if (!(result as Record<string, unknown>).getContent) {
+        return res.success(result); // direct (json)
       } else {
         return result; // TextOutput or HtmlOutput
       }
@@ -79,19 +80,23 @@ export class HttpService {
     }
   }
 
-  execute(handlers: RoutingHandler[], req: RouteRequest, res: RouteResponse) {
+  execute(
+    handlers: RoutingHandler[],
+    req: RouteRequest,
+    res: RouteResponse
+  ): RoutingHandler | RoutingResult {
     const handler = handlers.shift() as RoutingHandler;
     if (handlers.length === 0) {
       return handler(req, res, () => {
         throw new Error('No more handler.');
       });
     } else {
-      const next: RouteNext = data => {
+      const next = (data => {
         if (data) {
           req.data = {...req.data, ...data};
         }
         return this.execute(handlers, req, res);
-      };
+      }) as RouteNext;
       return handler(req, res, next);
     }
   }

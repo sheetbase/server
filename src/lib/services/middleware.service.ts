@@ -1,19 +1,24 @@
-import {RouteRequest, RouteResponse, RouteNext, RoutingHandler} from '../types';
-import {ServerService} from './server.service';
+import {
+  RouteRequest,
+  RouteResponse,
+  RouteNext,
+  RoutingHandler,
+} from '../types/server.type';
+import {OptionService} from './option.service';
 import {APIKeyService} from './api-key.service';
 
 export class MiddlewareService {
   constructor(
-    private serverService: ServerService,
+    private optionService: OptionService,
     private apiKeyService: APIKeyService
   ) {}
 
   apiKey() {
     return ((req: RouteRequest, res: RouteResponse, next: RouteNext) => {
-      const {trigger, failure} = this.serverService.getOptions();
+      const {trigger, failure} = this.optionService.getOptions();
       // get the api key object
       const apiKey = this.apiKeyService.getApiKey(
-        req.body.key || req.query.key
+        (req.body.key as string) || (req.query.key as string)
       );
       // invalid
       if (!apiKey) {

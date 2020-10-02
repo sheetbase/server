@@ -1,5 +1,4 @@
 import {
-  Options,
   DisabledRouteValue,
   DisabledRoutes,
   RoutingMethod,
@@ -9,11 +8,9 @@ import {
   Routes,
   Middlewares,
   RouteMiddlewares,
-} from '../types';
+} from '../types/server.type';
 
 export class ServerService {
-  private options: Options;
-
   private routingErrors: RoutingErrors = {};
   private disabledRoutes: DisabledRoutes = {};
 
@@ -23,16 +20,7 @@ export class ServerService {
 
   private methods: RoutingMethod[] = ['get', 'post', 'put', 'patch', 'delete'];
 
-  constructor(options: Options = {}) {
-    this.options = {
-      views: '',
-      ...options,
-    };
-  }
-
-  getOptions() {
-    return this.options;
-  }
+  constructor() {}
 
   getMethods() {
     return this.methods;

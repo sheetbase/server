@@ -1,4 +1,4 @@
-import {ResponseService} from './services/response.service';
+import {ResponseService} from '../services/response.service';
 
 export interface Options {
   /**
@@ -28,7 +28,7 @@ export interface ApiKey {
   title?: string;
   description?: string;
   createdAt?: string;
-  [meta: string]: any;
+  [meta: string]: unknown;
 }
 
 export interface ApiKeys {
@@ -41,7 +41,7 @@ export interface HttpParam {
   e?: string;
   method?: RoutingMethod;
   body?: string;
-  [param: string]: any;
+  [param: string]: unknown;
 }
 
 export interface HttpEvent {
@@ -58,33 +58,33 @@ export interface RouterExtending {
 }
 
 export interface RouteGroup extends RouterExtending {
-  [method: string]: any;
+  [method: string]: unknown;
 }
 
 export interface RouteSet {
   endpoint: string;
   disabled?: DisabledRouteValue;
   errors?: RoutingErrors;
-  all?(req: RouteRequest, res: RouteResponse): any;
-  get?(req: RouteRequest, res: RouteResponse): any;
-  post?(req: RouteRequest, res: RouteResponse): any;
-  put?(req: RouteRequest, res: RouteResponse): any;
-  patch?(req: RouteRequest, res: RouteResponse): any;
-  delete?(req: RouteRequest, res: RouteResponse): any;
+  all?(req: RouteRequest, res: RouteResponse): RoutingResult;
+  get?(req: RouteRequest, res: RouteResponse): RoutingResult;
+  post?(req: RouteRequest, res: RouteResponse): RoutingResult;
+  put?(req: RouteRequest, res: RouteResponse): RoutingResult;
+  patch?(req: RouteRequest, res: RouteResponse): RoutingResult;
+  delete?(req: RouteRequest, res: RouteResponse): RoutingResult;
 }
 
 export interface RouteRequest {
-  query: any;
-  body: any;
-  data: any;
+  query: Record<string, unknown>;
+  body: Record<string, unknown>;
+  data: Record<string, unknown>;
 }
 
 export type RouteResponse = ResponseService;
 
-export type RouteNext = (data?: {}) => RoutingHandler;
+export type RouteNext = (data?: Record<string, unknown>) => RoutingHandler;
 
 export interface ResponseSuccess {
-  data: {};
+  data: Record<string, unknown>;
   success?: boolean;
   status?: number;
 }
@@ -99,7 +99,15 @@ export type RoutingHandler = (
   req: RouteRequest,
   res: RouteResponse,
   next: RouteNext
-) => any;
+) => RoutingResult;
+
+export type RoutingResult =
+  | void
+  | string
+  | unknown[]
+  | Record<string, unknown>
+  | GoogleAppsScript.Content.TextOutput
+  | GoogleAppsScript.HTML.HtmlOutput;
 
 export interface RoutingError {
   message: string;
@@ -129,6 +137,6 @@ export interface RouteMiddlewares {
 
 export type LoggingLevel = 'debug' | 'info' | 'warning' | 'error';
 
-export type LoggingValue = string | {};
+export type LoggingValue = string | Record<string, unknown>;
 
 export type ViewEngine = 'gs' | 'hbs' | 'ejs';

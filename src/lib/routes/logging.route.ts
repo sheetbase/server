@@ -1,4 +1,4 @@
-import {LoggingLevel, LoggingValue} from '../types';
+import {LoggingLevel, LoggingValue} from '../types/server.type';
 import {MonitoringService} from '../services/monitoring.service';
 
 export class LoggingRoute {
@@ -10,8 +10,8 @@ export class LoggingRoute {
 
   /**
    * Set a server log
-   * @params body.level - The logging level
-   * @params body.value - The logging value
+   * @param body.level - The logging level
+   * @param body.value - The logging value
    */
   put(req: {
     body: {

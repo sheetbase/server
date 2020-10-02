@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import {RoutingError, ViewEngine} from '../types';
+import {RoutingError, ViewEngine} from '../types/server.type';
+import {OptionService} from './option.service';
 import {ServerService} from './server.service';
 
 declare const ejs: {
@@ -13,7 +14,10 @@ declare const Handlebars: {
 export class ResponseService {
   private allowedExtensions = ['gs', 'hbs', 'ejs'];
 
-  constructor(private serverService: ServerService) {}
+  constructor(
+    private optionService: OptionService,
+    private serverService: ServerService
+  ) {}
 
   send<Data>(data: string | Data) {
     if (typeof data === 'string') {
@@ -113,13 +117,13 @@ export class ResponseService {
   render(
     templating: string | GoogleAppsScript.HTML.HtmlTemplate,
     data: {
-      [key: string]: any;
+      [key: string]: unknown;
     } = {},
     viewEngine?: ViewEngine
   ) {
     // turn file into the templating
     if (typeof templating === 'string') {
-      const {views} = this.serverService.getOptions();
+      const {views} = this.optionService.getOptions();
       // extract file name & extension
       const fileName = templating;
       const fileExt = fileName.split('.').pop() as string;

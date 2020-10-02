@@ -1,4 +1,4 @@
-import {LoggingLevel, LoggingValue} from '../types';
+import {LoggingLevel, LoggingValue} from '../types/server.type';
 
 export class MonitoringService {
   constructor() {}
