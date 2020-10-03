@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MiddlewareService | @sheetbase/server</title>
+	<title>APIKeyMiddleware | @sheetbase/server</title>
 	<meta name="description" content="Documentation for @sheetbase/server">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="middlewareservice.html">MiddlewareService</a>
+					<a href="apikeymiddleware.html">APIKeyMiddleware</a>
 				</li>
 			</ul>
-			<h1>Class MiddlewareService</h1>
+			<h1>Class APIKeyMiddleware</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">MiddlewareService</span>
+						<span class="target">APIKeyMiddleware</span>
 					</li>
 				</ul>
 			</section>
@@ -79,13 +79,13 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="middlewareservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="apikeymiddleware.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="middlewareservice.html#apikey" class="tsd-kind-icon">api<wbr>Key</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="apikeymiddleware.html#use" class="tsd-kind-icon">use</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,13 +97,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Middleware<wbr>Service<span class="tsd-signature-symbol">(</span>optionService<span class="tsd-signature-symbol">: </span><a href="optionservice.html" class="tsd-signature-type">OptionService</a>, apiKeyService<span class="tsd-signature-symbol">: </span><a href="apikeyservice.html" class="tsd-signature-type">APIKeyService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="middlewareservice.html" class="tsd-signature-type">MiddlewareService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new APIKey<wbr>Middleware<span class="tsd-signature-symbol">(</span>optionService<span class="tsd-signature-symbol">: </span><a href="optionservice.html" class="tsd-signature-type">OptionService</a>, apiKeyService<span class="tsd-signature-symbol">: </span><a href="apikeyservice.html" class="tsd-signature-type">APIKeyService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="apikeymiddleware.html" class="tsd-signature-type">APIKeyMiddleware</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/sheetbase/server/blob/7a36288/src/lib/services/middleware.service.ts#L10">lib/services/middleware.service.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/sheetbase/server/blob/cd275a9/src/lib/middlewares/api-key.middleware.ts#L10">lib/middlewares/api-key.middleware.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -115,7 +115,7 @@
 									<h5>apiKeyService: <a href="apikeyservice.html" class="tsd-signature-type">APIKeyService</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="middlewareservice.html" class="tsd-signature-type">MiddlewareService</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="apikeymiddleware.html" class="tsd-signature-type">APIKeyMiddleware</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -123,16 +123,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="apikey" class="tsd-anchor"></a>
-					<h3>api<wbr>Key</h3>
+					<a name="use" class="tsd-anchor"></a>
+					<h3>use</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">api<wbr>Key<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#routinghandler" class="tsd-signature-type">RoutingHandler</a></li>
+						<li class="tsd-signature tsd-kind-icon">use<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#routinghandler" class="tsd-signature-type">RoutingHandler</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/sheetbase/server/blob/7a36288/src/lib/services/middleware.service.ts#L16">lib/services/middleware.service.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/sheetbase/server/blob/cd275a9/src/lib/middlewares/api-key.middleware.ts#L16">lib/middlewares/api-key.middleware.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../globals.html#routinghandler" class="tsd-signature-type">RoutingHandler</a></h4>
@@ -151,6 +151,21 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="apikeymiddleware.html" class="tsd-kind-icon">APIKey<wbr>Middleware</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="apikeymiddleware.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="apikeymiddleware.html#use" class="tsd-kind-icon">use</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="apikeyservice.html" class="tsd-kind-icon">APIKey<wbr>Service</a>
 					</li>
@@ -163,21 +178,6 @@
 					<li class=" tsd-kind-class">
 						<a href="loggingroute.html" class="tsd-kind-icon">Logging<wbr>Route</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="middlewareservice.html" class="tsd-kind-icon">Middleware<wbr>Service</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="middlewareservice.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="middlewareservice.html#apikey" class="tsd-kind-icon">api<wbr>Key</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="monitoringservice.html" class="tsd-kind-icon">Monitoring<wbr>Service</a>
 					</li>
