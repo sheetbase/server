@@ -13,8 +13,8 @@ export class APIKeyMiddleware {
     private apiKeyService: APIKeyService
   ) {}
 
-  use() {
-    return ((req: RouteRequest, res: RouteResponse, next: RouteNext) => {
+  use(): RoutingHandler {
+    return (req: RouteRequest, res: RouteResponse, next: RouteNext) => {
       const {trigger, failure} = this.optionService.getOptions();
       // get the api key object
       const apiKey = this.apiKeyService.getApiKey(
@@ -34,6 +34,6 @@ export class APIKeyMiddleware {
       }
       // process next
       return next();
-    }) as RoutingHandler;
+    };
   }
 }

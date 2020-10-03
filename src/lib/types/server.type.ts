@@ -83,7 +83,7 @@ export interface RouteRequest {
 
 export type RouteResponse = ResponseService;
 
-export type RouteNext = (data?: Record<string, unknown>) => RoutingHandler;
+export type RouteNext = (data?: Record<string, unknown>) => RoutingResult;
 
 export interface ResponseSuccess {
   data: Record<string, unknown>;

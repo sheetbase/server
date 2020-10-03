@@ -84,7 +84,7 @@ export class HttpService {
     handlers: RoutingHandler[],
     req: RouteRequest,
     res: RouteResponse
-  ): RoutingHandler | RoutingResult {
+  ): RoutingResult {
     const handler = handlers.shift() as RoutingHandler;
     if (handlers.length === 0) {
       return handler(req, res, () => {
