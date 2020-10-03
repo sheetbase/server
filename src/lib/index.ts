@@ -7,7 +7,8 @@ import {RouterService} from './services/router.service';
 import {HttpService} from './services/http.service';
 import {MonitoringService} from './services/monitoring.service';
 import {APIKeyService} from './services/api-key.service';
-import {MiddlewareService} from './services/middleware.service';
+
+import {APIKeyMiddleware} from './middlewares/api-key.middleware';
 
 import {SystemRoute} from './routes/system.route';
 import {LoggingRoute} from './routes/logging.route';
@@ -20,7 +21,7 @@ export class Lib {
   httpService: HttpService;
   monitoringService: MonitoringService;
   apiKeyService: APIKeyService;
-  middlewareService: MiddlewareService;
+  apiKeyMiddleware: APIKeyMiddleware;
   systemRoute: SystemRoute;
   loggingRoute: LoggingRoute;
 
@@ -39,7 +40,8 @@ export class Lib {
     );
     this.monitoringService = new MonitoringService();
     this.apiKeyService = new APIKeyService(this.optionService);
-    this.middlewareService = new MiddlewareService(
+    // middlewares
+    this.apiKeyMiddleware = new APIKeyMiddleware(
       this.optionService,
       this.apiKeyService
     );

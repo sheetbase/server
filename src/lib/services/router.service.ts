@@ -55,7 +55,11 @@ export class RouterService {
     return routerInstance;
   }
 
-  register(items: unknown[], routeEnabling?: true | DisabledRoutes) {
+  register(
+    items: unknown[],
+    routeEnabling?: true | DisabledRoutes,
+    middlewares: RoutingHandler[] = []
+  ) {
     let moduleDisabledRoutes: DisabledRoutes = {};
     // register values
     for (let i = 0; i < items.length; i++) {
@@ -85,37 +89,37 @@ export class RouterService {
           switch (routeMethod) {
             case 'ALL':
             case 'all':
-              router.all(routeEndpoint, (req, res, next) =>
+              router.all(routeEndpoint, ...middlewares, (req, res, next) =>
                 (routeGroup[method] as RoutingHandler)(req, res, next)
               );
               break;
             case 'GET':
             case 'get':
-              router.get(routeEndpoint, (req, res, next) =>
+              router.get(routeEndpoint, ...middlewares, (req, res, next) =>
                 (routeGroup[method] as RoutingHandler)(req, res, next)
               );
               break;
             case 'POST':
             case 'post':
-              router.post(routeEndpoint, (req, res, next) =>
+              router.post(routeEndpoint, ...middlewares, (req, res, next) =>
                 (routeGroup[method] as RoutingHandler)(req, res, next)
               );
               break;
             case 'PUT':
             case 'put':
-              router.put(routeEndpoint, (req, res, next) =>
+              router.put(routeEndpoint, ...middlewares, (req, res, next) =>
                 (routeGroup[method] as RoutingHandler)(req, res, next)
               );
               break;
             case 'PATCH':
             case 'patch':
-              router.patch(routeEndpoint, (req, res, next) =>
+              router.patch(routeEndpoint, ...middlewares, (req, res, next) =>
                 (routeGroup[method] as RoutingHandler)(req, res, next)
               );
               break;
             case 'DELETE':
             case 'delete':
-              router.delete(routeEndpoint, (req, res, next) =>
+              router.delete(routeEndpoint, ...middlewares, (req, res, next) =>
                 (routeGroup[method] as RoutingHandler)(req, res, next)
               );
               break;
@@ -137,37 +141,37 @@ export class RouterService {
         // handler
         if (!!routeSet.all && routeSet.all instanceof Function) {
           // all
-          this.all(endpoint, (req, res, next) =>
+          this.all(endpoint, ...middlewares, (req, res, next) =>
             (routeSet.all as RoutingHandler)(req, res, next)
           );
         } else {
           // get
           if (!!routeSet.get && routeSet.get instanceof Function) {
-            this.get(endpoint, (req, res, next) =>
+            this.get(endpoint, ...middlewares, (req, res, next) =>
               (routeSet.get as RoutingHandler)(req, res, next)
             );
           }
           // post
           if (!!routeSet.post && routeSet.post instanceof Function) {
-            this.post(endpoint, (req, res, next) =>
+            this.post(endpoint, ...middlewares, (req, res, next) =>
               (routeSet.post as RoutingHandler)(req, res, next)
             );
           }
           // put
           if (!!routeSet.put && routeSet.put instanceof Function) {
-            this.put(endpoint, (req, res, next) =>
+            this.put(endpoint, ...middlewares, (req, res, next) =>
               (routeSet.put as RoutingHandler)(req, res, next)
             );
           }
           // patch
           if (!!routeSet.patch && routeSet.patch instanceof Function) {
-            this.patch(endpoint, (req, res, next) =>
+            this.patch(endpoint, ...middlewares, (req, res, next) =>
               (routeSet.patch as RoutingHandler)(req, res, next)
             );
           }
           // delete
           if (!!routeSet.delete && routeSet.delete instanceof Function) {
-            this.delete(endpoint, (req, res, next) =>
+            this.delete(endpoint, ...middlewares, (req, res, next) =>
               (routeSet.delete as RoutingHandler)(req, res, next)
             );
           }
