@@ -63,6 +63,11 @@ export class RouterService {
     let moduleDisabledRoutes: DisabledRoutes = {};
     // register values
     for (let i = 0; i < items.length; i++) {
+      // combine local middlewares
+      const {middlewares: setOrGroupMiddlewares = []} = items[i] as
+        | RouteGroup
+        | RouteSet;
+      middlewares = [...middlewares, ...setOrGroupMiddlewares];
       // a group
       if (!(items[i] as Record<string, unknown>).endpoint) {
         const routeGroup = items[i] as RouteGroup;

@@ -55,6 +55,7 @@ export interface RouterExtending {
   baseEndpoint?: string;
   disabledRoutes?: DisabledRoutes;
   routingErrors?: RoutingErrors;
+  middlewares?: RoutingHandler[];
 }
 
 export interface RouteGroup extends RouterExtending {
@@ -65,6 +66,7 @@ export interface RouteSet {
   endpoint: string;
   disabled?: DisabledRouteValue;
   errors?: RoutingErrors;
+  middlewares?: RoutingHandler[];
   all?(req: RouteRequest, res: RouteResponse): RoutingResult;
   get?(req: RouteRequest, res: RouteResponse): RoutingResult;
   post?(req: RouteRequest, res: RouteResponse): RoutingResult;
