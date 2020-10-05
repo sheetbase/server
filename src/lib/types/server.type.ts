@@ -1,6 +1,13 @@
 import {ResponseService} from '../services/response.service';
 
-export interface Options {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Options extends Extendable {}
+
+export interface Extendable {
+  /**
+   * The unique app name
+   */
+  appName?: string;
   /**
    * The view template folder
    */

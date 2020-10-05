@@ -1,4 +1,5 @@
 import {
+  Extendable,
   DisabledRouteValue,
   DisabledRoutes,
   RoutingMethod,
@@ -9,6 +10,7 @@ import {
   Middlewares,
   RouteMiddlewares,
 } from '../types/server.type';
+import {OptionService} from './option.service';
 
 export class ServerService {
   private routingErrors: RoutingErrors = {};
@@ -20,7 +22,13 @@ export class ServerService {
 
   private methods: RoutingMethod[] = ['get', 'post', 'put', 'patch', 'delete'];
 
-  constructor() {}
+  constructor(private optionService: OptionService) {}
+
+  extend(extendableOptions: Extendable) {
+    return new ServerService(this.optionService).optionService.setOptions(
+      extendableOptions
+    );
+  }
 
   getMethods() {
     return this.methods;

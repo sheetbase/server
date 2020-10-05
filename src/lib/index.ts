@@ -10,7 +10,7 @@ import {APIKeyService} from './services/api-key.service';
 
 import {APIKeyMiddleware} from './middlewares/api-key.middleware';
 
-import {SystemRoute} from './routes/system.route';
+import {ServerRoute} from './routes/server.route';
 import {LoggingRoute} from './routes/logging.route';
 
 export class Lib {
@@ -22,13 +22,13 @@ export class Lib {
   monitoringService: MonitoringService;
   apiKeyService: APIKeyService;
   apiKeyMiddleware: APIKeyMiddleware;
-  systemRoute: SystemRoute;
+  serverRoute: ServerRoute;
   loggingRoute: LoggingRoute;
 
   constructor(options: Options = {}) {
     // services
     this.optionService = new OptionService(options);
-    this.serverService = new ServerService();
+    this.serverService = new ServerService(this.optionService);
     this.responseService = new ResponseService(
       this.optionService,
       this.serverService
@@ -46,7 +46,7 @@ export class Lib {
       this.apiKeyService
     );
     // routes
-    this.systemRoute = new SystemRoute();
+    this.serverRoute = new ServerRoute();
     this.loggingRoute = new LoggingRoute(this.monitoringService);
   }
 
@@ -55,8 +55,15 @@ export class Lib {
    */
   registerRoutes(routeEnabling?: true | DisabledRoutes) {
     return this.routerService.register(
-      [this.systemRoute, this.loggingRoute],
+      [this.serverRoute, this.loggingRoute],
       routeEnabling
     );
+  }
+
+  /**
+   * Get the API key middleware
+   */
+  useAPIKeyMiddleware() {
+    return this.apiKeyMiddleware.use();
   }
 }

@@ -1,5 +1,9 @@
-export class SystemRoute {
+export class ServerRoute {
   endpoint = '/system';
+
+  errors = {
+    'server/no-app-name': 'No unique "appName" provided',
+  };
 
   constructor() {}
 

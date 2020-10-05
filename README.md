@@ -14,7 +14,9 @@
   - [Lib properties](#lib-properties)
   - [Lib methods](#lib-methods)
     - [`registerRoutes(routeEnabling?)`](#lib-registerroutes-0)
+    - [`useAPIKeyMiddleware()`](#lib-useapikeymiddleware-0)
 - [Routing](#routing)
+  - [Errors](#routing-errors)
   - [Routes](#routing-routes)
     - [Routes overview](#routing-routes-overview)
     - [Routes detail](#routing-routes-detail)
@@ -60,6 +62,7 @@ export class App {
 | Name                                                                           | Type                                                                                                          | Description                           |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | [apiKeys?](https://sheetbase.github.io/server/interfaces/options.html#apikeys) | <code><a href="https://sheetbase.github.io/server/interfaces/apikeys.html" target="_blank">ApiKeys</a></code> | Multiple api keys                     |
+| [appName?](https://sheetbase.github.io/server/interfaces/options.html#appname) | <code>undefined \| string</code>                                                                              | The unique app name                   |
 | [failure?](https://sheetbase.github.io/server/interfaces/options.html#failure) | <code>undefined \| function</code>                                                                            | Handler for invalid api key           |
 | [key?](https://sheetbase.github.io/server/interfaces/options.html#key)         | <code>undefined \| string</code>                                                                              | Single api key                        |
 | [trigger?](https://sheetbase.github.io/server/interfaces/options.html#trigger) | <code>undefined \| function</code>                                                                            | Trigger every time an api key is used |
@@ -87,15 +90,16 @@ export class App {
 | [optionService](https://sheetbase.github.io/server/classes/lib.html#optionservice)         | <code><a href="https://sheetbase.github.io/server/classes/optionservice.html" target="_blank">OptionService</a></code>         |             |
 | [responseService](https://sheetbase.github.io/server/classes/lib.html#responseservice)     | <code><a href="https://sheetbase.github.io/server/classes/responseservice.html" target="_blank">ResponseService</a></code>     |             |
 | [routerService](https://sheetbase.github.io/server/classes/lib.html#routerservice)         | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>         |             |
+| [serverRoute](https://sheetbase.github.io/server/classes/lib.html#serverroute)             | <code><a href="https://sheetbase.github.io/server/classes/serverroute.html" target="_blank">ServerRoute</a></code>             |             |
 | [serverService](https://sheetbase.github.io/server/classes/lib.html#serverservice)         | <code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code>         |             |
-| [systemRoute](https://sheetbase.github.io/server/classes/lib.html#systemroute)             | <code><a href="https://sheetbase.github.io/server/classes/systemroute.html" target="_blank">SystemRoute</a></code>             |             |
 
 <h3><a name="lib-methods"><p>Lib methods</p>
 </a></h3>
 
-| Function                                                | Returns type                                                                                                           | Description              |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| [registerRoutes(routeEnabling?)](#lib-registerroutes-0) | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code> | Expose the module routes |
+| Function                                                | Returns type                                                                                                             | Description                |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| [registerRoutes(routeEnabling?)](#lib-registerroutes-0) | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>   | Expose the module routes   |
+| [useAPIKeyMiddleware()](#lib-useapikeymiddleware-0)     | <code><a href="https://sheetbase.github.io/server/globals.html#routinghandler" target="_blank">RoutingHandler</a></code> | Get the API key middleware |
 
 <h4><a name="lib-registerroutes-0" href="https://sheetbase.github.io/server/classes/lib.html#registerroutes"><p><code>registerRoutes(routeEnabling?)</code></p>
 </a></h4>
@@ -114,6 +118,17 @@ export class App {
 
 ---
 
+<h4><a name="lib-useapikeymiddleware-0" href="https://sheetbase.github.io/server/classes/lib.html#useapikeymiddleware"><p><code>useAPIKeyMiddleware()</code></p>
+</a></h4>
+
+**Get the API key middleware**
+
+**Returns**
+
+<code><a href="https://sheetbase.github.io/server/globals.html#routinghandler" target="_blank">RoutingHandler</a></code>
+
+---
+
 </section>
 
 <section id="routing" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
@@ -126,6 +141,13 @@ export class App {
 ```ts
 ServerModule.registerRoutes(routeEnabling?);
 ```
+
+<h3><a name="routing-errors"><p>Errors</p>
+</a></h3>
+
+**ServerModule** returns these routing errors, you may use the error code to customize the message:
+
+- `server/no-app-name`: No unique "appName" provided
 
 <h3><a name="routing-routes"><p>Routes</p>
 </a></h3>

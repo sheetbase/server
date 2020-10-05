@@ -76,11 +76,13 @@
 								<li><a href="#lib-properties">Lib properties</a></li>
 								<li><a href="#lib-methods">Lib methods</a><ul>
 										<li><a href="#lib-registerroutes-0"><code>registerRoutes(routeEnabling?)</code></a></li>
+										<li><a href="#lib-useapikeymiddleware-0"><code>useAPIKeyMiddleware()</code></a></li>
 									</ul>
 								</li>
 							</ul>
 						</li>
 						<li><a href="#routing">Routing</a><ul>
+								<li><a href="#routing-errors">Errors</a></li>
 								<li><a href="#routing-routes">Routes</a><ul>
 										<li><a href="#routing-routes-overview">Routes overview</a></li>
 										<li><a href="#routing-routes-detail">Routes detail</a><ul>
@@ -133,6 +135,11 @@
 								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#apikeys">apiKeys?</a></td>
 								<td><code><a href="https://sheetbase.github.io/server/interfaces/apikeys.html" target="_blank">ApiKeys</a></code></td>
 								<td>Multiple api keys</td>
+							</tr>
+							<tr>
+								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#appname">appName?</a></td>
+								<td><code>undefined | string</code></td>
+								<td>The unique app name</td>
 							</tr>
 							<tr>
 								<td><a href="https://sheetbase.github.io/server/interfaces/options.html#failure">failure?</a></td>
@@ -211,13 +218,13 @@
 								<td></td>
 							</tr>
 							<tr>
-								<td><a href="https://sheetbase.github.io/server/classes/lib.html#serverservice">serverService</a></td>
-								<td><code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code></td>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#serverroute">serverRoute</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/serverroute.html" target="_blank">ServerRoute</a></code></td>
 								<td></td>
 							</tr>
 							<tr>
-								<td><a href="https://sheetbase.github.io/server/classes/lib.html#systemroute">systemRoute</a></td>
-								<td><code><a href="https://sheetbase.github.io/server/classes/systemroute.html" target="_blank">SystemRoute</a></code></td>
+								<td><a href="https://sheetbase.github.io/server/classes/lib.html#serverservice">serverService</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/classes/serverservice.html" target="_blank">ServerService</a></code></td>
 								<td></td>
 							</tr>
 					</tbody></table>
@@ -235,6 +242,11 @@
 								<td><a href="#lib-registerroutes-0">registerRoutes(routeEnabling?)</a></td>
 								<td><code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code></td>
 								<td>Expose the module routes</td>
+							</tr>
+							<tr>
+								<td><a href="#lib-useapikeymiddleware-0">useAPIKeyMiddleware()</a></td>
+								<td><code><a href="https://sheetbase.github.io/server/globals.html#routinghandler" target="_blank">RoutingHandler</a></code></td>
+								<td>Get the API key middleware</td>
 							</tr>
 					</tbody></table>
 					<h4><a name="lib-registerroutes-0" href="https://sheetbase.github.io/server/classes/lib.html#registerroutes"><p><code>registerRoutes(routeEnabling?)</code></p>
@@ -258,12 +270,24 @@
 					<p><strong>Returns</strong></p>
 					<p><code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code></p>
 					<hr>
+					<h4><a name="lib-useapikeymiddleware-0" href="https://sheetbase.github.io/server/classes/lib.html#useapikeymiddleware"><p><code>useAPIKeyMiddleware()</code></p>
+					</a></h4>
+					<p><strong>Get the API key middleware</strong></p>
+					<p><strong>Returns</strong></p>
+					<p><code><a href="https://sheetbase.github.io/server/globals.html#routinghandler" target="_blank">RoutingHandler</a></code></p>
+					<hr>
 				</section>
 				<section id="routing" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
 					<h2><a name="routing"><p>Routing</p>
 					</a></h2>
 					<p><strong>ServerModule</strong> provides REST API endpoints allowing clients to access server resources. Theses enpoints are not exposed by default, to expose the endpoints:</p>
 					<pre><code class="language-ts">ServerModule.registerRoutes(routeEnabling?);</code></pre>
+					<h3><a name="routing-errors"><p>Errors</p>
+					</a></h3>
+					<p><strong>ServerModule</strong> returns these routing errors, you may use the error code to customize the message:</p>
+					<ul>
+						<li><code>server/no-app-name</code>: No unique &quot;appName&quot; provided</li>
+					</ul>
 					<h3><a name="routing-routes"><p>Routes</p>
 					</a></h3>
 					<h4><a name="routing-routes-overview"><p>Routes overview</p>
@@ -371,10 +395,10 @@
 						<a href="classes/routerservice.html" class="tsd-kind-icon">Router<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/serverservice.html" class="tsd-kind-icon">Server<wbr>Service</a>
+						<a href="classes/serverroute.html" class="tsd-kind-icon">Server<wbr>Route</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/systemroute.html" class="tsd-kind-icon">System<wbr>Route</a>
+						<a href="classes/serverservice.html" class="tsd-kind-icon">Server<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/apikey.html" class="tsd-kind-icon">Api<wbr>Key</a>
@@ -384,6 +408,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/disabledroutes.html" class="tsd-kind-icon">Disabled<wbr>Routes</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/extendable.html" class="tsd-kind-icon">Extendable</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/httpevent.html" class="tsd-kind-icon">Http<wbr>Event</a>
