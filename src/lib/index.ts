@@ -1,4 +1,9 @@
-import {Options, DisabledRoutes} from './types/server.type';
+import {
+  Options,
+  DisabledRoutes,
+  Middlewares,
+  RouteMiddlewares,
+} from './types/server.type';
 
 import {OptionService} from './services/option.service';
 import {ServerService} from './services/server.service';
@@ -28,7 +33,7 @@ export class Lib {
   constructor(options: Options = {}) {
     // services
     this.optionService = new OptionService(options);
-    this.serverService = new ServerService(this.optionService);
+    this.serverService = new ServerService();
     this.responseService = new ResponseService(
       this.optionService,
       this.serverService
@@ -53,10 +58,14 @@ export class Lib {
   /**
    * Expose the module routes
    */
-  registerRoutes(routeEnabling?: true | DisabledRoutes) {
+  registerRoutes(
+    routeEnabling?: true | DisabledRoutes,
+    middlewares?: Middlewares | RouteMiddlewares
+  ) {
     return this.routerService.register(
       [this.serverRoute, this.loggingRoute],
-      routeEnabling
+      routeEnabling,
+      middlewares
     );
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@sheetbase/server",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Build server app on Google Apps Script.",
   "author": "Sheetbase",
   "homepage": "https://sheetbase.dev",

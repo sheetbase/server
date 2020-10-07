@@ -1,9 +1,6 @@
 import {ResponseService} from '../services/response.service';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Options extends Extendable {}
-
-export interface Extendable {
+export interface Options {
   /**
    * The unique app name
    */
@@ -62,10 +59,10 @@ export interface RouterExtending {
   baseEndpoint?: string;
   disabledRoutes?: DisabledRoutes;
   routingErrors?: RoutingErrors;
-  middlewares?: RoutingHandler[];
 }
 
 export interface RouteGroup extends RouterExtending {
+  middlewares?: Middlewares | RouteMiddlewares;
   [method: string]: unknown;
 }
 
@@ -73,7 +70,7 @@ export interface RouteSet {
   endpoint: string;
   disabled?: DisabledRouteValue;
   errors?: RoutingErrors;
-  middlewares?: RoutingHandler[];
+  middlewares?: Middlewares | RouteMiddlewares;
   all?(req: RouteRequest, res: RouteResponse): RoutingResult;
   get?(req: RouteRequest, res: RouteResponse): RoutingResult;
   post?(req: RouteRequest, res: RouteResponse): RoutingResult;

@@ -13,7 +13,7 @@
 - [Lib](#lib)
   - [Lib properties](#lib-properties)
   - [Lib methods](#lib-methods)
-    - [`registerRoutes(routeEnabling?)`](#lib-registerroutes-0)
+    - [`registerRoutes(routeEnabling?, middlewares?)`](#lib-registerroutes-0)
     - [`useAPIKeyMiddleware()`](#lib-useapikeymiddleware-0)
 - [Routing](#routing)
   - [Errors](#routing-errors)
@@ -96,21 +96,22 @@ export class App {
 <h3><a name="lib-methods"><p>Lib methods</p>
 </a></h3>
 
-| Function                                                | Returns type                                                                                                             | Description                |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| [registerRoutes(routeEnabling?)](#lib-registerroutes-0) | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>   | Expose the module routes   |
-| [useAPIKeyMiddleware()](#lib-useapikeymiddleware-0)     | <code><a href="https://sheetbase.github.io/server/globals.html#routinghandler" target="_blank">RoutingHandler</a></code> | Get the API key middleware |
+| Function                                                              | Returns type                                                                                                             | Description                |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| [registerRoutes(routeEnabling?, middlewares?)](#lib-registerroutes-0) | <code><a href="https://sheetbase.github.io/server/classes/routerservice.html" target="_blank">RouterService</a></code>   | Expose the module routes   |
+| [useAPIKeyMiddleware()](#lib-useapikeymiddleware-0)                   | <code><a href="https://sheetbase.github.io/server/globals.html#routinghandler" target="_blank">RoutingHandler</a></code> | Get the API key middleware |
 
-<h4><a name="lib-registerroutes-0" href="https://sheetbase.github.io/server/classes/lib.html#registerroutes"><p><code>registerRoutes(routeEnabling?)</code></p>
+<h4><a name="lib-registerroutes-0" href="https://sheetbase.github.io/server/classes/lib.html#registerroutes"><p><code>registerRoutes(routeEnabling?, middlewares?)</code></p>
 </a></h4>
 
 **Expose the module routes**
 
 **Parameters**
 
-| Param         | Type                                                                                                                                | Description |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| routeEnabling | <code>true \| <a href="https://sheetbase.github.io/server/interfaces/disabledroutes.html" target="_blank">DisabledRoutes</a></code> |             |
+| Param         | Type                                                                                                                                                                                                                                     | Description |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| routeEnabling | <code>true \| <a href="https://sheetbase.github.io/server/interfaces/disabledroutes.html" target="_blank">DisabledRoutes</a></code>                                                                                                      |             |
+| middlewares   | <code><a href="https://sheetbase.github.io/server/globals.html#middlewares" target="_blank">Middlewares</a> \| <a href="https://sheetbase.github.io/server/interfaces/routemiddlewares.html" target="_blank">RouteMiddlewares</a></code> |             |
 
 **Returns**
 

@@ -6,6 +6,8 @@ import {
   RouteGroup,
   DisabledRoutes,
   DisabledRouteValue,
+  Middlewares,
+  RouteMiddlewares,
 } from '../types/server.type';
 import {ServerService} from './server.service';
 
@@ -39,6 +41,30 @@ export class RouterService {
     return result;
   }
 
+  private processRouteMiddlewares(
+    customMiddlewares: Middlewares | RouteMiddlewares,
+    localMiddlewares: Middlewares | RouteMiddlewares,
+    classMethod: string,
+    method: string,
+    endpoint: string
+  ) {
+    let middlewares: Middlewares = [];
+    // custom
+    if (customMiddlewares instanceof Array) {
+      middlewares = [...middlewares, ...customMiddlewares];
+    } else {
+      const id = method + ':' + endpoint;
+      middlewares = [...middlewares, ...(customMiddlewares[id] || [])];
+    }
+    // local
+    if (localMiddlewares instanceof Array) {
+      middlewares = [...middlewares, ...localMiddlewares];
+    } else {
+      middlewares = [...middlewares, ...(localMiddlewares[classMethod] || [])];
+    }
+    return middlewares;
+  }
+
   extend(configs: RouterExtending, ignoreDisabledRoutes = false) {
     const {baseEndpoint = '', routingErrors, disabledRoutes} = configs;
     const routerInstance = new RouterService(this.serverService);
@@ -58,74 +84,82 @@ export class RouterService {
   register(
     items: unknown[],
     routeEnabling?: true | DisabledRoutes,
-    middlewares: RoutingHandler[] = []
+    customMiddlewares: Middlewares | RouteMiddlewares = []
   ) {
     let moduleDisabledRoutes: DisabledRoutes = {};
     // register values
     for (let i = 0; i < items.length; i++) {
-      // combine local middlewares
-      const {middlewares: setOrGroupMiddlewares = []} = items[i] as
+      const {middlewares: localMiddlewares = []} = items[i] as
         | RouteGroup
         | RouteSet;
-      middlewares = [...middlewares, ...setOrGroupMiddlewares];
       // a group
       if (!(items[i] as Record<string, unknown>).endpoint) {
         const routeGroup = items[i] as RouteGroup;
         const {baseEndpoint, disabledRoutes} = routeGroup;
-        // record disabled routes
+        // router instance / metas (no disabled)
+        const router = this.extend(routeGroup, true);
+        // disabled
         if (!!baseEndpoint && !!disabledRoutes) {
           moduleDisabledRoutes = {
             ...moduleDisabledRoutes,
             ...this.processDisabledRoutes(baseEndpoint, disabledRoutes),
           };
         }
-        // router instance / metas (no disabled)
-        const router = this.extend(routeGroup, true);
         // handler
-        const methods = Object.getOwnPropertyNames(
+        const classMethods = Object.getOwnPropertyNames(
           Object.getPrototypeOf(routeGroup)
         ).filter(x => x !== 'constructor');
-        for (let j = 0; j < methods.length; j++) {
-          const method = methods[j];
-          const [routeMethod, routeEndpoint] = method
+        for (let j = 0; j < classMethods.length; j++) {
+          const classMethod = classMethods[j];
+          // method & endpoint
+          const [routeMethod, routeEndpoint] = classMethod
             .replace('__', ' /')
             .split(' ')
             .map(x => x.replace(/_/g, '/'));
+          // group middlewares
+          const middlewares = this.processRouteMiddlewares(
+            customMiddlewares,
+            localMiddlewares,
+            classMethod,
+            routeMethod,
+            routeEndpoint
+          );
+          // register
           switch (routeMethod) {
             case 'ALL':
             case 'all':
               router.all(routeEndpoint, ...middlewares, (req, res, next) =>
-                (routeGroup[method] as RoutingHandler)(req, res, next)
+                (routeGroup[classMethod] as RoutingHandler)(req, res, next)
               );
               break;
             case 'GET':
             case 'get':
               router.get(routeEndpoint, ...middlewares, (req, res, next) =>
-                (routeGroup[method] as RoutingHandler)(req, res, next)
+                (routeGroup[classMethod] as RoutingHandler)(req, res, next)
               );
               break;
             case 'POST':
             case 'post':
               router.post(routeEndpoint, ...middlewares, (req, res, next) =>
-                (routeGroup[method] as RoutingHandler)(req, res, next)
+                (routeGroup[classMethod] as RoutingHandler)(req, res, next)
               );
               break;
             case 'PUT':
             case 'put':
               router.put(routeEndpoint, ...middlewares, (req, res, next) =>
-                (routeGroup[method] as RoutingHandler)(req, res, next)
+                (routeGroup[classMethod] as RoutingHandler)(req, res, next)
               );
               break;
             case 'PATCH':
             case 'patch':
               router.patch(routeEndpoint, ...middlewares, (req, res, next) =>
-                (routeGroup[method] as RoutingHandler)(req, res, next)
+                (routeGroup[classMethod] as RoutingHandler)(req, res, next)
               );
               break;
             case 'DELETE':
             case 'delete':
               router.delete(routeEndpoint, ...middlewares, (req, res, next) =>
-                (routeGroup[method] as RoutingHandler)(req, res, next)
+                (routeGroup[classMethod] as RoutingHandler)(req, res, next)
               );
               break;
             default:
@@ -136,50 +170,71 @@ export class RouterService {
       // a set
       else {
         const routeSet = items[i] as RouteSet;
-        const {endpoint, disabled, errors} = routeSet;
-        // record disabled routes
+        const {endpoint: routeEndpoint, disabled, errors} = routeSet;
+        // disabled
         if (disabled) {
-          moduleDisabledRoutes[endpoint] = disabled;
+          moduleDisabledRoutes[routeEndpoint] = disabled;
         }
-        // metas
+        // errors
         if (errors) this.serverService.addRoutingErrors(errors);
         // handler
-        if (!!routeSet.all && routeSet.all instanceof Function) {
-          // all
-          this.all(endpoint, ...middlewares, (req, res, next) =>
-            (routeSet.all as RoutingHandler)(req, res, next)
-          );
-        } else {
-          // get
-          if (!!routeSet.get && routeSet.get instanceof Function) {
-            this.get(endpoint, ...middlewares, (req, res, next) =>
+        const classMethod: string =
+          !!routeSet.all && routeSet.all instanceof Function
+            ? 'all'
+            : !!routeSet.get && routeSet.get instanceof Function
+            ? 'get'
+            : !!routeSet.post && routeSet.post instanceof Function
+            ? 'post'
+            : !!routeSet.put && routeSet.put instanceof Function
+            ? 'put'
+            : !!routeSet.patch && routeSet.patch instanceof Function
+            ? 'patch'
+            : !!routeSet.delete && routeSet.delete instanceof Function
+            ? 'delete'
+            : 'none';
+        const routeMethod = classMethod;
+        // set middlewares
+        const middlewares = this.processRouteMiddlewares(
+          customMiddlewares,
+          localMiddlewares,
+          classMethod,
+          routeMethod,
+          routeEndpoint
+        );
+        // register
+        switch (routeMethod) {
+          case 'all':
+            this.all(routeEndpoint, ...middlewares, (req, res, next) =>
+              (routeSet.all as RoutingHandler)(req, res, next)
+            );
+            break;
+          case 'get':
+            this.get(routeEndpoint, ...middlewares, (req, res, next) =>
               (routeSet.get as RoutingHandler)(req, res, next)
             );
-          }
-          // post
-          if (!!routeSet.post && routeSet.post instanceof Function) {
-            this.post(endpoint, ...middlewares, (req, res, next) =>
+            break;
+          case 'post':
+            this.post(routeEndpoint, ...middlewares, (req, res, next) =>
               (routeSet.post as RoutingHandler)(req, res, next)
             );
-          }
-          // put
-          if (!!routeSet.put && routeSet.put instanceof Function) {
-            this.put(endpoint, ...middlewares, (req, res, next) =>
+            break;
+          case 'put':
+            this.put(routeEndpoint, ...middlewares, (req, res, next) =>
               (routeSet.put as RoutingHandler)(req, res, next)
             );
-          }
-          // patch
-          if (!!routeSet.patch && routeSet.patch instanceof Function) {
-            this.patch(endpoint, ...middlewares, (req, res, next) =>
+            break;
+          case 'patch':
+            this.patch(routeEndpoint, ...middlewares, (req, res, next) =>
               (routeSet.patch as RoutingHandler)(req, res, next)
             );
-          }
-          // delete
-          if (!!routeSet.delete && routeSet.delete instanceof Function) {
-            this.delete(endpoint, ...middlewares, (req, res, next) =>
+            break;
+          case 'delete':
+            this.delete(routeEndpoint, ...middlewares, (req, res, next) =>
               (routeSet.delete as RoutingHandler)(req, res, next)
             );
-          }
+            break;
+          default:
+            break;
         }
       }
     }
