@@ -18,7 +18,7 @@
     "docs": "ayedocs generate",
     "test": "npm run compile && nyc --cache false mocha test/**/*.js",
     "coverage": "nyc --cache false report --reporter=text-lcov | coveralls",
-    "check": "gts check",
+    "lint": "gts lint",
     "fix": "gts fix"
   },
   "keywords": [
@@ -37,16 +37,16 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@sheetbase/app-scripts": "^3.0.0",
-    "@types/chai": "^4.2.12",
+    "@sheetbase/app-scripts": "^3.0.1",
+    "@types/chai": "^4.2.13",
     "@types/google-apps-script": "^1.0.16",
     "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.2",
+    "@types/node": "^14.11.8",
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
-    "gts": "^2.0.2",
+    "gts": "^3.0.0",
     "mocha": "^8.1.3",
     "nyc": "^15.1.0",
-    "typescript": "^3.9.3"
+    "typescript": "^4.0.3"
   }
 }

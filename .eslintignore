@@ -1,0 +1,4 @@
+docs/
+**/*.js
+**/*.d.ts
+src/lib/vendors/*.ts
