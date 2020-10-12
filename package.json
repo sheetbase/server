@@ -1,6 +1,6 @@
 {
   "name": "@sheetbase/server",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Build server app on Google Apps Script.",
   "author": "Sheetbase",
   "homepage": "https://sheetbase.dev",
@@ -37,7 +37,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@sheetbase/app-scripts": "^3.0.1",
+    "@sheetbase/app-scripts": "^3.0.2",
     "@types/chai": "^4.2.13",
     "@types/google-apps-script": "^1.0.16",
     "@types/mocha": "^8.0.3",
