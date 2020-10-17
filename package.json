@@ -37,7 +37,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@sheetbase/server-scripts": "^3.0.5",
+    "@sheetbase/server-scripts": "^3.0.6",
     "@types/chai": "^4.2.13",
     "@types/google-apps-script": "^1.0.16",
     "@types/mocha": "^8.0.3",
